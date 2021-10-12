@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Configures existing Batch Managers. For each resource it will define it's capacity per capacity class types as well as the valid aggregation classes and the compatible batch cycles.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="BATCH_MANAGERS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="BATCH_MANAGER" maxOccurs="unbounded"/>
+				<xs:element name="BATCHCYCLES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Batch Cycles Definition.
+Not Required for the Scheduler</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BATCHCYCLE" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="BATCHCYCLEID">
+											<xs:annotation>
+												<xs:documentation>Batch Cycle ID</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="BATCHCYCLENAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Batch Cycle Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="BATCHCYCLEDESCRIPTION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Batch Cycle Description</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CAPACITYCLASSID" type="xs:string"/>
+	<xs:element name="AGGREGATIONCLASSID" type="xs:string"/>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="BATCH_MANAGER">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="RESOURCECODE">
+					<xs:annotation>
+						<xs:documentation>Resource to where this batch manager is applied</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="BATCHMINQTTY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This is the minimum quantity (In percentage) that should be met so that the batch job can start.
+Depending on the value of SCHEDULEBATCHESINRISK in aps_prgcfg this might not be respected if the delivery dates are in risk.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="MAXWAITTIMEFORFULLCYCLE" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This is the maximum wait time the resource will wait for a batch cycle to become full, after this time has passed the batch cycle will be processed regardless of being full or not.
+If not set the batch cycles will only be processed once they are full or when the algorithm estimates that the delivery date for one of the POLINEs in that cycle is in risk</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="MAXWAITTIMEFORFULLCYCLEUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Time Unit for MAXWAITTIMEFORFULLCYCLE</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CAPACITYCLASSES">
+					<xs:annotation>
+						<xs:documentation>Each article has an associated capacity. For each batch resource it represents how many pieces fit the batch.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CAPACITYCLASS" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="CAPACITYCLASSID">
+											<xs:annotation>
+												<xs:documentation>ID of this Capacity Class</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="CAPACITYCLASSVALUE">
+											<xs:annotation>
+												<xs:documentation>Value for this Capacity Class</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AGGREGATIONCLASSES">
+					<xs:annotation>
+						<xs:documentation>Each aggregation class define which batch cycles can perform a particular operation. The aggregation class comes attached to the article in aps_pord.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="AGGREGATIONCLASS" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CAPACITYCLASSVALUE" type="xs:integer"/>
+	<xs:element name="BATCHCYCLES"/>
+	<xs:element name="BATCHCYCLEID" type="xs:string"/>
+	<xs:element name="ISCOMPATIBLE" type="xs:boolean"/>
+	<xs:element name="AGGREGATIONCLASS">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AGGREGATIONCLASSID">
+					<xs:annotation>
+						<xs:documentation>ID of this Aggregation Class</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="BATCHCYCLES">
+					<xs:annotation>
+						<xs:documentation>Batch Cycles Configuration for this Aggregation Class</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BATCHCYCLE" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="BATCHCYCLEID">
+											<xs:annotation>
+												<xs:documentation>ID of this Batch Cycle</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ISCOMPATIBLE">
+											<xs:annotation>
+												<xs:documentation>Defines if a Batch Cycle is compatible with this aggregation class or not:
+0 - Incompatible;
+1 - Compatible;</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

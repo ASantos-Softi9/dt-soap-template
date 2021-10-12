@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>File used by the scheduler to log several information and error messages.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="DATAINFO">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DATAINF"/>
+				<xs:element ref="CRITERIADATA">
+					<xs:annotation>
+						<xs:documentation>Criteria data used during scheduling</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="MESSAGES">
+					<xs:annotation>
+						<xs:documentation>Messages are posted by the scheduler to inform of any errors or warnings that might have occurred</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CRITERIADATA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SORTRULECODE">
+					<xs:annotation>
+						<xs:documentation>Criteria used by the scheduler:
+1 (Minimize Setup Times)
+2 (Minimize Total Waiting Time)
+3 (Minimize Number of Late Jobs (Average Delay))
+4 (Maximize Resource Occupation)
+5 (Minimize Maximum Lateness)
+6 (Minimize Deviation From Delivery Dates)
+7 (Maximize Priority Satisfaction)
+8 (Maximize Turnover)
+9 (Maximize Energy Efficiency)
+10 (Minimize Late Sales Orders)
+20 (Minimize the sum of Cycle Time x Quantity)
+21 (Minimize the sum of Cycle Time x Quantity x Priority)
+22 (Minimize the difference to due dates x Priority)
+23 (Minimize the Total Cycle Time)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SCHEDRULECODE">
+					<xs:annotation>
+						<xs:documentation>Scheduler Rule used:
+Forward
+Backward</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DATAINF">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PROCTIME">
+					<xs:annotation>
+						<xs:documentation>Scheduler execution time in seconds</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERTOTAL">
+					<xs:annotation>
+						<xs:documentation>Total number of Operations</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERNOTASSIG">
+					<xs:annotation>
+						<xs:documentation>Number of Operations not processed by the scheduler, these are all the operations that have a possible start date in the XML after the end of the scheduling period</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERCONFIRM">
+					<xs:annotation>
+						<xs:documentation>Number of Operations confirmed/fixed (Inside programming horizon)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERCONFIRMOUT">
+					<xs:annotation>
+						<xs:documentation>Number of Operation confirmed/fixed (Outside programming horizon)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERSTACK">
+					<xs:annotation>
+						<xs:documentation>Number of Operations stacked</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERINHOR">
+					<xs:annotation>
+						<xs:documentation>Number of Operations scheduled inside programming horizon (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERINHOROUT">
+					<xs:annotation>
+						<xs:documentation>Number of Operations scheduled outside programming horizon (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERLATE">
+					<xs:annotation>
+						<xs:documentation>Number of late Operations (Inside programming horizon) (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBERLATEOUT">
+					<xs:annotation>
+						<xs:documentation>Number of late Operations (Outside programming horizon) (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBEREARLY">
+					<xs:annotation>
+						<xs:documentation>Number of early Operations (Inside programming horizon) (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="JOBNUMBEREARLYOUT">
+					<xs:annotation>
+						<xs:documentation>Number of early Operations (Outside programming horizon) (Includes confirmed operations)
+(Only includes Production Orders that were fully scheduled)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="JOBNUMBERCONFIRM" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERCONFIRMOUT" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBEREARLY" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBEREARLYOUT" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERINHOR" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERINHOROUT" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERLATE" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERLATEOUT" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERNOTASSIG" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERSTACK" type="xs:nonNegativeInteger"/>
+	<xs:element name="JOBNUMBERTOTAL" type="xs:nonNegativeInteger"/>
+	<xs:element name="PROCTIME" type="xs:double"/>
+	<xs:element name="SCHEDRULECODE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Backwards"/>
+				<xs:enumeration value="Forward"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="SORTRULECODE" type="xs:string"/>
+	<xs:element name="MESSAGE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MESSAGETYPE">
+					<xs:annotation>
+						<xs:documentation>Message Type:
+1 (Warning);
+2 (Error);</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="MESSAGECODE">
+					<xs:annotation>
+						<xs:documentation>Message Code:
+1 (Warning: POLine with possible start date outside programming horizon);
+2 (Warning: Resource wihtout calendar);
+3 (Warning: Operation not scheduled);
+4 (Warning: Generic warning about operation data);
+11 (Warning: Batch Minimum Quantity Rule was broken due to due date being in risk);
+12 (Warning: Batch Operation wasn't scheduled even though its delivery date was in risk due to batch minimum quantity);</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="MESSAGEFIELDS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Free fields to represent more info about the message code</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="MESSAGEFIELD" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="MESSAGEFIELDSEQ" type="xs:int">
+											<xs:annotation>
+												<xs:documentation>Sequence for this Message Field. This is necessary since  some messages expect some field info to be on a specified position.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="MESSAGEFIELDVALUE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Free field to represent more info about the message code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="MESSAGETYPE" type="xs:integer"/>
+	<xs:element name="MESSAGECODE" type="xs:integer"/>
+	<xs:element name="MESSAGES">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MESSAGE" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

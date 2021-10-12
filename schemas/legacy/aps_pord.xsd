@@ -1,0 +1,2040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Configuration of Production Orders, it's Lines and respective Operations namely alternate resources and preparation/execution times.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="PRODUCTIONORDERS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PRODUCTIONORDER" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PRODUCTIONORDER">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="PRODUCTIONORDERID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the production order ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POCODE">
+					<xs:annotation>
+						<xs:documentation>Production Order Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POPRIORITY" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Priority.
+Lower means higher priority</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POPOSSIBLESTARTDATE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Possible Start Date</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POREQUESTDATE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Request Date.
+If datetime resolution is needed use the POREQUESTDATETIME tag instead</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="POREQUESTDATETIME" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Request DateTime.
+If only date resolution is needed use the POREQUESTDATE tag instead</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="POLINES">
+					<xs:annotation>
+						<xs:documentation>Production Order Lines for this Production Order</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="POLINE" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="POCODE" type="xs:string"/>
+	<xs:element name="POPRIORITY" type="xs:integer"/>
+	<xs:element name="OPPOSSIBLESTARTDATE" type="xs:dateTime"/>
+	<xs:element name="POLINEREQUESTDATE" type="xs:date"/>
+	<xs:element name="POLINE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POLINEID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the production order line ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POLINESEQUENCENR">
+					<xs:annotation>
+						<xs:documentation>Production Order Line Number/Sequence</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POLINEPRIORITY" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Line Priority.
+Lower means higher priority</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POLINEPOSSIBLESTARTDATE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Line Possible Start Date. This will be applied regardless PASSMATERIALS being set or not in aps_prgcfg</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="POLINEREQUESTDATE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Line Request Date.
+If datetime resolution is needed use the POLINEREQUESTDATETIME tag instead</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="POLINEREQUESTDATETIME" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Production Order Line Request DateTime.
+If datetime resolution is needed use the POLINEREQUESTDATE tag instead</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ESTIMATEDREQUESTDATE" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Estimated Request Date for this Production Order Line. This is estimated by the scheduler based on the POLines that depend on this one if they exist and only if the POLINEREQUESTDATE tag isn't filled.
+Filled by scheduler only, if you want to set a request date use the POLINEREQUESTDATE instead.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="POLINEGROUP" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Group for this POLine. In some situations there might be a need of splitting 1 POLine, in such a situation this tag can be used to tie them together.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SALESORDERCODE" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Sales Order code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CUSTOMERNAME" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Name of the customer for this Sales Order</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ARTICLECODE">
+					<xs:annotation>
+						<xs:documentation>Article Code. Normally 1 Article per Production Order Line, but it can be overriden at Operation Level if needed.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ARTICLENAME" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Article Name</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ARTICLEGROUP" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Article Group or Family.
+Only used on higher level planning.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ARTICLEPLANNEDQUANTITY">
+					<xs:annotation>
+						<xs:documentation>Quantity to be produced</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ARTICLEQTTYUNIT">
+					<xs:annotation>
+						<xs:documentation>Article Measurement Unit</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="NETVALUE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Net Value for this Production Order Line</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CAPACITYCLASS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Capacity Class of this article, to be used in Batch Manager. The capacity value that's considered will be the one in the ARTICLEPLANNEDQUANTITY tag.
+See description in aps_bmg.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="AGGREGATIONCLASS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Aggregation Class of this article, to be used in Batch Manager.
+See description in aps_bmg.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CAPACITYCLASSPLANNEDQTTY" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>In some cases parts are processed in batch or tunnel resources inside specidic containers and therefore a new measurement unit should be used for calculations. This tag allows to define such quantities using this container oriented approach and when specified this will be used in batch and tunnel resources. It can also be overriden at the OPERATION level.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CAPACITYCLASSQTTYUNIT" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Measurement Unit for the CAPACITYCLASSPLANNEDQTTY value</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="AGGRCAPACITYCLASS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Aggregated Capacity Class of this article group, to be used in higher level resources only.
+See description in aps_aggcap.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="GENERATEPRECEDENCIES" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if the scheduling engine should automatically generate precedencies for the operations of this POLine.
+By default it will generate them.
+Admissible values are;
+0 - Do not generate precedencies;
+1 - Generate precedencies;
+
+If set to 1 (or tag doesn't exist) and all OPERATIONS of this POLINE don't have any precedencies set, the engine will consider them as being sequential and will generate precendencies accordingly.
+If set to 0 and on a similar scenario, no precedencies will be generated and all OPERATIONS will be able to be executed in parallel.
+
+There's normally no need to use this tag. The only scenario where you will want to set this to 0 is when the operation routing for the POLINE ends in multiple operations instead of a single one.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="HOTLOT" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if this Production Order Line should be treated as a Hot Lot.
+Hot Lots must take precedence over ali other lots regard less of priority, due date or scheduling criteria.
+Admissible values are:
+0 - No Hot Lot (normal behavior);
+1 - Hot Lot</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="STORAGECAPCLASSOUTID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Storage Capacity Class ID after the operation has been executed for this POLINE, This is the storage capacity class ID to be used by the Output Buffers.
+This can be overriden at the OPERATION level.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="STORAGECAPCLASSOUTQTTY" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Storage Capacity Class Quantity after the operation has been executed for this POLINE, This is the storage capacity class quantity to be used by the Output Buffers.. 
+This can be overriden at the OPERATION level</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OPERATIONS">
+					<xs:annotation>
+						<xs:documentation>Operations for this Production Order Line</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="OPERATION" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="OPERATIONID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the operation ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONSEQUENCENR">
+											<xs:annotation>
+												<xs:documentation>Operation Number/Sequence</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONORIGINALSEQUENCENR" type="xs:positiveInteger" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Used to keep the original Operation Number after partitioning it</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONCODE">
+											<xs:annotation>
+												<xs:documentation>Operation Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONNAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Operation Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONTYPE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation Type. Admissible values are:
+P - Production
+M - Maintenance
+Defaults to P
+
+Note: It's highly recommended that 'M' operations are not mixed together with 'P' operations in the same POLINE</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="P"/>
+													<xs:enumeration value="M"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="OPERATIONLEVEL" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates the position in the hierarquy of the operations.
+0 - Work Center Operation;
+1 - Department Operation;
+2 - Factory Operation;
+
+If empty it assumes 0.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PARENTOPERATION" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Higher level operation code in which this operation is included.
+Both operations MUST belong to the same Production Order and Production Order Line.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="MATERIALAVAILABILITYDATETIME" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Availability date of the materials needed for this Production Order Line, this acts as a possible start date and will only be considered if PASSMATERIALS=1 in aps_prgcfg</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPPOSSIBLESTARTDATE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation Possible Start Date.
+Related with material availability. If assumed that all materials need to be available when POLINE starts, this field only needs to be filled for the first OP.
+This is also the "most probable value" when using a stochastic behaviour.
+Make sure PASSMATERIALS is set to 1 in aps_prgcfg otherwise this value will be ignored.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPMINPOSSIBLESTARTDATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Minimum Possible Start Date when using a stochastic behaviour</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPMAXPOSSIBLESTARTDATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Maximum Possible Start Date when using a stochastic behaviour</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPPOSSIBLESTARTDATELAMBDA" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Scale Parameter to use when calculating operation possible start date using a stochastic behaviour</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPARTICLEPRODUCEDQTTY" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If this operation has already started this field contains the already processed qtty in the OP context.
+If this tag exists then the tag OPARTICLEPRODUCEDPERCENTAGE cannot be present.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPARTICLEPRODUCEDPERCENTAGE" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If this operation has already started this field contains the already processed percentage in the OP context.
+If this tag exists then the tag OPARTICLEPRODUCEDQTTY cannot be present.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPARTICLEPLANNEDQTTY" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Quantity to be produced for this operation. Defaults to POLine.ARTICLEPLANNEDQUANTITY.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPARTICLEQTTYUNIT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation quantity measurement unit. Defaults to POLINE.ARTICLEQTTYUNIT.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ARTICLENAME" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Article Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ARTICLEGROUP" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Article Group or Family.
+Only used on higher level planning.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ARTICLECODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Article Code. Use this if your article changes during the production order line process.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONSTATE">
+											<xs:annotation>
+												<xs:documentation>Operation State:
+1 (Not Confirmed/To Schedule)
+2 (Confirmed)
+3 (In Production)
+4 (Finished)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="RESOURCECODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Selected Resource code for this Operation.
+Filled with chosen resource by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="RESGROUPINDEX" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Selected Work Group Resource Index for this Operation.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESCONFIGCODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The selected Resource Config Code (Only applicable when the selected resource for this operation has resource configuration(s) defined)
+Filled by the scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONEXECTIME" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Selected Operation Execution Time.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONEXECTIMEUNIT" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Execution Time measurement unit:
+D - Day;
+H - Hour;
+M - Minute;
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="RESOURCEQUANTITY" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Selected Resource Quantity from alternative resources.
+Once the operation is scheduled in one of the alternative resources the value of that alt. resource RESOURCEQUANTITY tag is copied into this one.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONSTART" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation Start Date.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OPERATIONEND" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation End Date.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="PREPTIME" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Selected Preparation Time for this operation.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="PREPTIMEUNIT" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Preparation Time Measurement Unit.
+D - Day;
+H - Hour;
+M - Minute;
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPARTICLETUNINGQTTY" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Quantity that will be produced during the Tuning period. If this tag is specified then it is mandatory that the tag OPARTICLEPLANNEDQTTY is also filled at the OPERATION level.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="TUNNELCYCLEID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Tunnel Cycle ID to where this Operation was assigned. Only relevant if assigned to a tunnel type resource.
+Filled by scheduler unless this is a fixed OP</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SCHEDULINGDIRECTION" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Direction this operation was scheduled. This is only relevant for the scheduler.
+Filled by scheduler.
+Admissible values are:
+F - Forward
+B - Backwards
+U - Unscheduled
+Fixed operations will be tagged as 'U' as well.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="F"/>
+													<xs:enumeration value="B"/>
+													<xs:enumeration value="U"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="BREAKOPERATION" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies if this Operation can be scheduled across several working periods:
+1 - Yes;
+0 - No, Operation must be fully scheduled on a single working period;
+Default value is 1</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="CHARACTERISTICGROUPCODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Characteristics Group Code for the main Characteristic.
+See aps_charsort and aps_chgmatrix.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="CHARCODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Characteristic Code for the main Characteristic.
+See aps_charsort and aps_chgmatrix</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CHRENERGYGRPCODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Energetic Characteristic Group Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CHRENERGYCODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Energetic Characteristic Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OVERLAPTYPE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the type of Operation overlapping related to the next operation(s):
+S - Overlap - from start in minutes;
+E - Overlap - from end in minutes;
+P - Overlap - from start in pieces;
+C - Overlap - from start in batch cycles (Only applicable for operations executed in batch resources)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OVERLAPPREPOPTION" type="xs:nonNegativeInteger" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Type of overlap to use:
+0 - Don't overlap preparation times;
+1 - Overlap preparation times;
+Defaults to 0.
+This can also be set globally on aps_prgcfg.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OVERLAPQTTY" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Overlap Time or Quantity:
+In minutes if OVERLAPTYPE = S or E;
+In number of items if OVERLAPTYPE = P</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="OVERLAPQTTYMAX" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Maximum Overlap Time or Quantity. Follows the same rules as OVERLAPQTTY</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="RESOURCEPARTITIONING" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines if the scheduler can split this operation between it's alternative resources.
+0 - No;
+1 - Yes;
+2 - Already Split by the Scheduler;
+3 - Is Already Split (Usually by a GUI);
+4 - Split Quantities by resources balancing them according to the Execution Time on each resource;
+
+If this field is set to anything other than 0, it's required that all operations of this POLine have the PRECEDENCES tag properly filled as well.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESOURCES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of Resources where this operation can be executed.
+Alternatively you can specify these using the SERVICECODE tag.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="RESOURCE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="RESOURCECODE">
+																	<xs:annotation>
+																		<xs:documentation>Resource Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="RESOURCEPRIORITY" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Resource Priority.
+Lower value means Higher Priority</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="OPERATIONEXECTIME">
+																	<xs:annotation>
+																		<xs:documentation>Execution Time for this Operation on this Resource.
+This is also the "most probable value" when using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPERATIONMINEXECTIME" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Minimum Operation Execution Time when using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPERATIONMAXEXECTIME" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Maximum Operation Execution Time when using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPERATIONEXECTIMELAMBDA" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Scale Parameter to use when calculating operation execution times using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="OPERATIONEXECTIMEUNIT">
+																	<xs:annotation>
+																		<xs:documentation>Execution Time measurement unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="RESOURCEQUANTITY" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Number of homogenous resources considered for calculating OPERATIONEXECTIME and PREPTIME.
+If ommited assumes the same value defined in Resource.RESOURCEQUANTITY</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="PREPTIME">
+																	<xs:annotation>
+																		<xs:documentation>Default Preparation Time for this Operation on this Resource</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="PREPTIMEUNIT">
+																	<xs:annotation>
+																		<xs:documentation>Preparation Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="PREPTIMEMAX" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Maximum Preparation Time when using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="PREPTIMEMIN" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Minimum Preparation Time when using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="PREPTIMELAMBDA" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Scale Parameter to use when calculating operation preparation times using a stochastic behaviour</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="EXECNONSTOP" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Defines if operations can be executed on non-working periods of this alternative resource (As long as they have started on a working one).
+
+Admissible Values are:
+0 - Operations cannot be executed in non-working periods (Default);
+1 - Operations can be executed in non-working periods;
+
+This tag overrides the RESOURCE.EXECNONSTOP tag of this particular resource in aps_res. It will only be used for resources that have RESOURCE.EXECNONSTOP=1 set in aps_res</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:integer">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="SUBRESOURCESNEEDED" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Sub-Resources needed by this Resource</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="SWITCHALLOWED" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed
+
+Default value is 0</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:integer">
+																						<xs:enumeration value="0"/>
+																						<xs:enumeration value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+Default value is 1
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:integer">
+																						<xs:enumeration value="0"/>
+																						<xs:enumeration value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present
+
+Default value is 1</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:integer">
+																						<xs:enumeration value="0"/>
+																						<xs:enumeration value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+Default value is 1
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:integer">
+																						<xs:enumeration value="0"/>
+																						<xs:enumeration value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element ref="SUBRESOURCE" minOccurs="0" maxOccurs="unbounded"/>
+																			<xs:element ref="SUBRESOURCEGROUP" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>Sub-Resource Groups enable defining logical expressions between multiple Sub-Resources (or other Sub-Resource Groups)</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="SUBRESOURCESETCODE" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>Reference to Sub-Resource Groups defined in aps_subres.xml</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																		<xs:attribute name="mode">
+																			<xs:annotation>
+																				<xs:documentation>Defines if needed Sub-Resources should be combined using AND or OR.
+Defaults to AND.</xs:documentation>
+																			</xs:annotation>
+																			<xs:simpleType>
+																				<xs:restriction base="xs:string">
+																					<xs:enumeration value="AND"/>
+																					<xs:enumeration value="OR"/>
+																				</xs:restriction>
+																			</xs:simpleType>
+																		</xs:attribute>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="RESOURCECONFIGS" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Resource Configurations. This will allow to configure different characteristics and times for this operation on this resource depending on the configuration being used.
+The scheduler will try to select the more appropriate configuration for this resource.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="RESOURCECONFIG" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="RESCONFIGCODE" type="xs:string">
+																							<xs:annotation>
+																								<xs:documentation>The code for this resource configuration</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="EXECTIME" type="xs:decimal" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>Selected Operation Execution Time when this configuration is used.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="EXECTIMEUNIT" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>Execution Time measurement unit:
+D - Day;
+H - Hour;
+M - Minute;
+Defaults to the same unit as the one defined in the OPERATIONEXECTIMEUNIT tag at the RESOURCE level.</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:enumeration value="D"/>
+																									<xs:enumeration value="H"/>
+																									<xs:enumeration value="M"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element ref="PREPTIME" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>Default Preparation Time for this Operation on this Resource when this configuration is used.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="PREPTIMEUNIT" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>Preparation Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;
+Defaults to the same unit as the one defined in the PREPTIMEUNIT tag at the RESOURCE level.</xs:documentation>
+																							</xs:annotation>
+																							<xs:simpleType>
+																								<xs:restriction base="xs:string">
+																									<xs:enumeration value="D"/>
+																									<xs:enumeration value="H"/>
+																									<xs:enumeration value="M"/>
+																								</xs:restriction>
+																							</xs:simpleType>
+																						</xs:element>
+																						<xs:element name="CHRGRPS" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>Definition of multiple characteristics sorting.
+This tag allows to define characteritics that will vary from resource to resource (ie they are not statically assigned to each operation).
+All characteristic groups defined inside this tag, MUST also be present in the OPERATION.CHRGRPS tag.</xs:documentation>
+																							</xs:annotation>
+																							<xs:complexType>
+																								<xs:sequence>
+																									<xs:element name="CHRGRP" maxOccurs="unbounded">
+																										<xs:complexType>
+																											<xs:sequence>
+																												<xs:element ref="CHARACTERISTICGROUPCODE">
+																													<xs:annotation>
+																														<xs:documentation>Characteristics Group Code.
+See aps_charsort and aps_chgmatrix</xs:documentation>
+																													</xs:annotation>
+																												</xs:element>
+																												<xs:element ref="CHARCODE">
+																													<xs:annotation>
+																														<xs:documentation>Characteristic Code.
+See aps_charsort and aps_chgmatrix</xs:documentation>
+																													</xs:annotation>
+																												</xs:element>
+																											</xs:sequence>
+																										</xs:complexType>
+																									</xs:element>
+																								</xs:sequence>
+																							</xs:complexType>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SERVICECODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies the Service this operation requires in order to be executed.
+This will lookup the resources that offer this service from aps_res.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ADDITIONALSUBRESOURCESSETS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of additional Sub-Resources needed for this operation which won't be retrieved using the regular SERVICODE lookup method.
+This tag can only be used together with the SERVICECODE tag.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SUBRESOURCESETCODE" type="xs:string" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Sub-Resource set code needed. This code will be used to lookup additional sub-resources from aps_res for the specified SERVICECODE and with KEYTYPE=R and KEYVALUE=this tag value.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="SELECTEDSUBRESOURCES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of all Sub-Resources being used to execute this operation.
+All information inside this tag is filled by the scheduler unless this is a fixed Operation.
+This tag is only required when alternate sub-resources are specified otherwise it may not be filled.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="SUBRESOURCE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="SUBRESOURCECODE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Sub-Resource Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCEGROUPID" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Sub-Resource Group ID that the selected Sub-Resource belongs to</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCEQUANTITY" type="xs:positiveInteger">
+																	<xs:annotation>
+																		<xs:documentation>Used Quantity of this Sub-Resource</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCEPERCENTAGE" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Dedication percentage of this Sub Resource
+Value between 0 and 100</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCEWHENNEEDED">
+																	<xs:annotation>
+																		<xs:documentation>Type of dedication needed:
+S - Setup;
+E - Execution;
+B - Both;</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:enumeration value="S"/>
+																			<xs:enumeration value="E"/>
+																			<xs:enumeration value="B"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="SUBRESOURCEUSAGESTART" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>Start datetime of this sub-resource usage</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCEUSAGEEND" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>End datetime of this sub-resource usage</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SUBRESOURCESWITCHED" type="xs:int">
+																	<xs:annotation>
+																		<xs:documentation>This will indicate if this sub-resource was switched to or from during the operation execution. Admissible values are:
+0 - No switch occurred
+1 - This sub-resource was switched to another one during the operation
+2 - Another sub-resource was switched into this one during the operation
+3 - Another sub-resource was switched into this one and then this one was switched to another during the operation (ie 1+2)</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SWITCHALLOWED" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The value of the SWITCHALLOWED tag for the selected sub-resource </xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:integer">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The value of the CONSIDERFORSUBRESOURCEBLOCKING tag for the selected sub-resource </xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:integer">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The value of the DISCARDSUBRESOURCEBLOCKINGIFMISSING tag for the selected sub-resource </xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:integer">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The value of the CONSIDERFOREXCLUSIVESUBRESGROUPS tag for the selected sub-resource </xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:integer">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PRECEDENCES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Emumerate the OPs thar precede this one, that can be from this POLINE or from other POLines</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PRECEDENCE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="POCODE">
+																	<xs:annotation>
+																		<xs:documentation>Production Order Code of the previous Operation</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="POLINESEQUENCENR">
+																	<xs:annotation>
+																		<xs:documentation>Production Order Line Code of the previous Operation</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="OPERATIONSEQUENCENR">
+																	<xs:annotation>
+																		<xs:documentation>Number/Sequence of the previous Operation</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ALTFLOWOCCURRENCEFREQUENCY" type="xs:integer" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Alternate Flow Occurrence frequency (0-100) for the current OPERATION.
+Defaults to 100.
+This must be specified only on the first operation of each alternate or rework flow.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="OPPARTITIONS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Just in the case of Batch operations, after scheduling.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="OPPARTITION" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>OP Partitions are automatically created by the scheduler, unless this is a fixed OP in that case they must already be created</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="OPPARTITIONNR" type="xs:integer">
+																	<xs:annotation>
+																		<xs:documentation>Partition ID</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPBATCHCYCLEID" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Batch Cycle ID on where this OP Partition is executed</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPPSTARTDT" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>OP Partition Start Date</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPPENDDT" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>OP Partition End Date</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPPARTITIONQTTY" type="xs:decimal">
+																	<xs:annotation>
+																		<xs:documentation>OP Partition Quantity</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="DELAYEDDUETOMINQTTY" type="xs:integer" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>This will be set to 1 by the scheduler whenever the specified Operation Partition wasn’t scheduled when it should have been due to the batch minimum quantity restriction not being fulfilled.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPPEXECTIME" type="xs:decimal">
+																	<xs:annotation>
+																		<xs:documentation>Execution Time for this OP partition in minutes</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OPPPREPTIME" type="xs:decimal">
+																	<xs:annotation>
+																		<xs:documentation>Preparation Time for this OP partition in minutes</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="MATERIALS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of Materials needed for this Operation.
+Not used by the algorithm, if you have availability restrictions due to materials use the OPPOSSIBLESTARTDATE tag instead in the OPERATION element.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="MATERIAL" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="LOCATION" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Source Location of the Material</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ITEMCODE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Material Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ITEMNAME" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Material Name/Description</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="QTTYPERUNIT" type="xs:double">
+																	<xs:annotation>
+																		<xs:documentation>Quantity needed for each Operation Part/Unit.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TOTALQTTY" type="xs:double">
+																	<xs:annotation>
+																		<xs:documentation>Total Quantity needed</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="QTTYUNIT" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Material Quantity Measurement Unit</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="AVAILABILITYDATE" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Availability Date for the Material. If empty or non-existant it means the material will need to be available at the start of the Operation.
+
+The scheduler won't make use the information on this tag, you need to set the OPPOSSIBLESTARTDATE at the OPERATION tag level instead.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="WAITTIME" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Waiting Times Definition.
+Wait Times define the waiting periods from this operation to the next ones.
+If you want finer grained control over wait times you should use the WAITTIMES tag instead.
+You cannot use both the WAITTIME and WAITTIMES tags.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="WAITTIMEFROM">
+														<xs:annotation>
+															<xs:documentation>Wait Time Starting Point:
+S - From start of execution;
+E - From end of execution;</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:enumeration value="S"/>
+																<xs:enumeration value="E"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="MINWAITTIMEVALUE" type="xs:decimal" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Minimum waiting time in minutes to start the next Operation</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="MAXWAITTIMEVALUE" type="xs:decimal" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Maximum waiting time in minutes to start the next Operation</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="WAITTIMETYPE">
+														<xs:annotation>
+															<xs:documentation>Wait Time Type:
+C - Calendar Time (in minutes);
+F - Full Time (in minutes);
+D - Number of midnights passed;
+
+If C calculates time values using only working period times. If F considers both work and non-working periods.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:enumeration value="C"/>
+																<xs:enumeration value="F"/>
+																<xs:enumeration value="D"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ALLOWOVERLAP" type="xs:integer" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Indicates if overlaps between both operations are allowed regardless of the minimum wait times.
+
+Supported Values are:
+0 - Overlap not allowed. This means that an operation can only start AFTER the previous one has been completed.
+1 - Overlap allowed. An operation can start before the previous one has finished as long as its minimum wait times are respected. (Default)
+</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="WAITTIMES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Waiting Times Definition.
+This allows you to define waiting times between this operation and others that succeed it in the operation routing. Allows finer grained control over the WAITTIME tag.
+You cannot use both the WAITTIME and WAITTIMES tags.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="WAITTIME" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="POCODE">
+																	<xs:annotation>
+																		<xs:documentation>Production Order Code of the Operation this wait time refers to.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="POLINESEQUENCENR">
+																	<xs:annotation>
+																		<xs:documentation>Production Order Line Number/Sequence of the Operation this wait time refers to.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="OPERATIONSEQUENCENR">
+																	<xs:annotation>
+																		<xs:documentation>Operation Number/Sequence of the Operation this wait time refers to.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="WAITTIMEFROM">
+																	<xs:annotation>
+																		<xs:documentation>Wait Time Starting Point:
+S - From start of execution;
+E - From end of execution;</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:enumeration value="S"/>
+																			<xs:enumeration value="E"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="MINWAITTIMEVALUE" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Minimum waiting time in minutes to start the next Operation</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="MAXWAITTIMEVALUE" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Maximum waiting time in minutes to start the next Operation</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="WAITTIMETYPE">
+																	<xs:annotation>
+																		<xs:documentation>Wait Time Type:
+C - Calendar Time (in minutes);
+F - Full Time (in minutes);
+D - Number of midnights passed;
+
+If C calculates time values using only working period times. If F considers both work and non-working periods.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:enumeration value="C"/>
+																			<xs:enumeration value="F"/>
+																			<xs:enumeration value="D"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="ALLOWOVERLAP" type="xs:integer" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Indicates if overlaps between both operations are allowed regardless of the minimum wait times.
+
+Supported Values are:
+0 - Overlap not allowed. This means that an operation can only start AFTER the previous one has been completed.
+1 - Overlap allowed. An operation can start before the previous one has finished as long as its minimum wait times are respected. (Default)
+</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OVERLAPPREPOPTION" type="xs:nonNegativeInteger" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Type of overlap to use:
+0 - Don't overlap preparation times;
+1 - Overlap preparation times;
+
+This setting overrides the one that can be set at OPERATION level. That value will be used if nothing is set here.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CHRGRPS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Definition of multiple characteristics sorting</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="CHRGRP" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="CHARACTERISTICGROUPCODE">
+																	<xs:annotation>
+																		<xs:documentation>Characteristics Group Code.
+See aps_charsort and aps_chgmatrix</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="CHARCODE">
+																	<xs:annotation>
+																		<xs:documentation>Characteristic Code.
+See aps_charsort and aps_chgmatrix</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="CHARTYPE" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Characteristic Type.
+This allows to chain different untie sorters between multiple characteristics sorting. Current supported values are:
+CHR - Characteristic (Default)
+ENR - Energetic Characteristics
+
+This will only be used if at least one characteristic is being sorted using a list as defined in aps_charsort.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:enumeration value="CHR"/>
+																			<xs:enumeration value="ENR"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="AGGREGATIONCLASS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Aggregation Class of this operation, to be used in Batch Manager. Overrides AGGREGATIONCLASS of the POLine.
+See description in aps_bmg.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="CAPACITYCLASS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Overrides CAPACITYCLASS of the POLine.
+See description in aps_bmg.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPCAPACITYCLASSPLANNEDQTTY" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Same as POLINE.CAPACITYCLASSPLANNEDQTTY, but defined at the OPERATION level</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPCAPACITYCLASSPRODUCEDQTTY" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If this operation has already started this field contains the already processed qtty in the OP context using the container oriented approach..
+If this tag exists then the tag OPCAPACITYCLASSPRODUCEDPERCENTAGE cannot be present.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPCAPACITYCLASSPRODUCEDPERCENTAGE" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If this operation has already started this field contains the already processed percentage in the OP context using the container oreinted approach.
+If this tag exists then the tag OPCAPACITYCLASSPRODUCEDQTTY cannot be present.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPCAPACITYCLASSQTTYUNIT" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operation quantity measurement unit when using a container oriented approach. Defaults to POLINE.CAPACITYCLASSQTTYUNIT</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESOURCEBLOCKINGID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operations with the same RESOURCEBLOCKINGID will be force scheduled in the same resource.
+When using this feature make sure all Operations sharing the same RESOURCEBLOCKINGID have the exact same alternate resources.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="NONSEQUENTIALBLOCKID" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Used for Non-Sequential blocks of operations.
+Uniquely identifies the block of this operation</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ALLOWEDPARALLELEXECUTION" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines if an NSB operation can be executed in parallel with others from the same NSB.
+Admissible values are:
+0 - Cannot be executed in parallel with any other operation of the same NSB;
+1 - Can be executed in parallel with any other operation of the same NSB (except the ones tagged with 0);
+Other positive number - It can be executed in parallel with other operations of the same NSB and with the same allowParallelNSBOps value or 1;
+Defaults to 1.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ISOPTIONAL" type="xs:nonNegativeInteger" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates if this operation is optional.
+1 - Optional
+0 - Required</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPTIONALOPOCCURRENCEFREQUENCY" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Optional Operation Occurrence frequency (0-100).
+Defaults to 100.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPTIONALSCHEDULED" type="xs:boolean" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Only applicable to optional operations (ISOPTIONAL=1). If false it means the scheduler determined that this operation won't be executed.
+This tag is filled by the scheduler.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ISTESTOPERATION" type="xs:nonNegativeInteger" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Specifies if this Operation preceedes operations for Alternate Flows or Rework.
+1 - Yes;
+0 - No; </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SCRAPPERCENTAGE" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Percentage of this operation quantity that is expected to go to scrap.
+If not specified, it will assume the remaining percentage so that the total value of ALTFLOWOCCURRENCEFREQUENCY in the next operations is 100</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESTRICTTOPLANT" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This will allow you to restrict consecutive operations to be executed in resources of the same plant (check the PLANTCODE tag on aps_res).
+Admissible Values are:
+1 - Enforces that this operation will be scheduled only in resources with the same PLANTCODE as the resources where its precedences were scheduled;
+0 - This operation can be scheduled in any of its alternative resources (default behavior).
+Also see RESTRICTTOPLANTID tag for a more customized functionality</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESTRICTTOPLANTID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Similar to the RESTRICTTOPLANT tag, but this will ensure that all operations with the same value in this tag will all be scheduled in the same plant. This applies to any operations regardless belonging to the same Production Orders or not.
+The content of this tag is simply an identifier it's NOT related to the PLANTCODE tag.
+You can only fill this tag or the RESTRICTTOPLANT tag, but never both.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="PLANTTRANSFERMODE" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This tag is used in combination with the RESTRICTTOPLANTID tag and will specify if it's possible to transfer WIP between plants if this operation cannot be executed in any resource inside the plant where it's currently locked to.
+Admissible values are:
+0 - Transfer isn't allowed;
+1 - Transfer allowed and the item shouldd continue on the new plant while possible;
+
+Default value is 0</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CAPACITYSLOTSTART" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>First Capacity Slot where this operation was scheduled.
+Only applicable when planning on higher level resources.
+Filled by scheduler unless this is a fixed OP.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CAPACITYSLOTEND" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Last Capacity Slot where this operation was scheduled.
+Only applicable when planning on higher level resources.
+Filled by scheduler unless this is a fixed OP.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESOURCELOCKCODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Once an operation with a  RESOURCELOCKCODE is scheduled on a resource, this resource will only be able to execute other operations with the same RESOURCELOCKCODE until ALL  operations with that RESOURCELOCKCODE and RESOURCEUNLOCKCODE are completed
+This requires the tag ISBLOCKABLE to be set to 1 for that resource in aps_res</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESOURCEUNLOCKCODES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of the RESOURCELOCKCODEs this operation will unlock</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence maxOccurs="unbounded">
+													<xs:element name="RESOURCEUNLOCKCODE" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Once all operations with the same RESOURCEUNLOCKCODE are completed any resource that has been locked due to RESOURCELOCKCODE will be unlocked and therefore be able to process other operations</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RESOURCELOCKMARGIN" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Before scheduling this operation (if it has a RESOURCELOCKCODE set) the algorithm will check if any of the resources where the operations that can unlock this one will be locked to another code by the time instant this operation ends. If that happens the operation won't be scheduled at that timestamp. This tag allows to define an extra margin (in minutes) to add to the end timestamp thus allowing the operation to be scheduled even if one resource is currently locked to another code.
+This will also apply to situations where this operation doesn't have any RESOURCELOCKCODE set, but their immediate successors do in that case the above check will also be done ensuring the resources needed for the successors aren't locked</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="NONPARALLELGROUPID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operations with the same NONPARALLELGROUPID cannot be executed in parallel even if only partially (they canot overlap).
+This restriction applies to all Operations regardless their Production Order or Line.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONDUESTART" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Desired start date for this operation, the scheduler will try to start the operation at this date time if possible.
+This is used by maintenance operations</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONEARLYDUESTART" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Relates to OPERATIONDUESTART, this is the earliest dateTime the operation can start (ie cannot start before this instant)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OPERATIONLATEDUESTART" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Relates to OPERATIONDUESTART, this is the latest dateTime the operation can start (ie cannot start after this instant)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="BATCHINTEGRITY" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If set to 1 it means this operation cannot be split between multiple batch cycles and it must be fully executed in a single cycle.
+Default value is 0.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRANSPORTPICKUPGROUPID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operations with the same TRANSPORTPICKUPGROUPID will only be picked up by a transport resource when ALL operations with the same TRANSPORTPICKUPGROUPID are completed.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRANSPORTRESOURCES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>List of alternate transport resources that are able to transport the result of this operation to the next resource. The transport times will be obtained from the transport matrices and the transport resource type.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="TRANSPORTRESOURCE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="TRCODE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Alternate Transport Resource code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TRPRIORITY" type="xs:integer">
+																	<xs:annotation>
+																		<xs:documentation>Transport Resource Priority.
+Lower value means Higher Priority</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PRIORITYOVERRIDEID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Used together with the PRIORITYOVERRIDEMODE tag in aps_res. This will define the priority override tag for this operation and resources with this feature enabled in aps_res will try to locally group together operations with the same PRIORITYOVERRIDEID</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="STORAGECAPCLASSOUTID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Storage Capacity Class ID after the operation has been executed for this OPERATION, This is the storage capacity class ID to be used by the Output Buffers.,
+This will override the value set at the POLINE level</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="STORAGECAPCLASSOUTQTTY" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Storage Capacity Class Quantity after the operation has been executed for this OPERATION, This is the storage capacity class quantity to be used by the Output Buffers.,
+This will override the value set at the POLINE level</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="HIGHERPRIORITYSWITCHDATE" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines a datetime after which this operation will be considered as having higher priority than everything else (except hot lots and other special operations like those having maximum wait times restrictions)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="HIGHERPRIORITYSWITCHMODE" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the behavior of the HIGHERPRIORITYSWITCHDATE tag. Admissible values are:
+0 - Give higher priority only
+1 - Give higher priority and also act as possible start date
+2 - Act as a possible start date only
+
+If set to 0 the operation will simply be given higher priority, but can still be scheduled before HIGHERPRIORITYSWITCHDATE while having its normal priority. If set to 1 the date will also act as a possible start date which means the engine will never schedule the operation before HIGHERPRIORITYSWITCHDATE.
+
+Default value is 0</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:integer">
+													<xs:enumeration value="0"/>
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="SUBRESOURCEBLOCKINGID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Operations with the same SUBRESOURCEBLOCKINGID will try to use the same sub-resources when possible. The engine will ensure that once a sub-resource is used for an operation it will also be used for all other operations that have the same SUBRESOURCEBLOCKINGID value. This is somewhat similar to the RESOURCEBLOCKINGID setting, but applied to sub-resources.
+This setting uses a soft blocking approach which means that sub-resources must be used by operations with the same SUBRESOURCEBLOCKINGID, but will still be available for selection by other operations although the algorithm will try to minimize these occurrences while possible.
+For a more aggressive blocking approach please check the BLOCKINGMODE tag in aps_res</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SUBRESOURCEBLOCKINGIDWAITTHRESHOLD" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This is a threshold (in minutes) the engine will consider for operations using the SUBRESOURCEBLOCKINGID tag to unblock sub-resources. This value represents the maximum wait time this operation can wait before being scheduled using different sub-resources.
+This time takes into consideration only the available calendar of the resource where this  operation will be scheduled, but won't make any distinction between working and non-working times of the respective sub-resource. The threshold is calculated from the end of the last precedence of this operation regardless of its SUBRESOURCEBLOCKINGID value.
+After this threshold has been reached the sub-resource block will be revoked and the operation will be able to use other sub-resource(s) instead of the previously blocked one(s)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EXCLUSIVESUBRESGROUPID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>In some situations it must be assured that the same sub-resource cannot be reused across multiple operations, this can be achieved by using exclusive sub-resource groups. This tag defines the identifier of such a group and all operations with the same EXCLUSIVESUBRESGROUPID will belong to the same group. Exclusivity can be achieved using the EXCLUSIVESUBRESVALUE tag.
+Only sub-resources that are enabled for using this feature using the CONSIDERFOREXCLUSIVESUBRESGROUPS tag will be considered</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EXCLUSIVESUBRESVALUE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the exclusivity of sub-resources for each operation group. Operations with the same EXCLUSIVESUBRESGROUPID, but different values in this tag won't be able to reuse the same sub-resources (As long as they are enabled using the CONSIDERFOREXCLUSIVESUBRESGROUPS tag).
+Operations with the same EXCLUSIVESUBRESVALUE can use the same sub-resources</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="POLINESEQUENCENR" type="xs:integer"/>
+	<xs:element name="ARTICLE">
+		<xs:complexType>
+			<xs:sequence/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ARTICLECODE" type="xs:string"/>
+	<xs:element name="ARTICLEPLANNEDQUANTITY" type="xs:decimal"/>
+	<xs:element name="ARTICLEQUANTITYUNIT" type="xs:string"/>
+	<xs:element name="CAPACITYCLASS" type="xs:string"/>
+	<xs:element name="AGGREGATIONCLASS" type="xs:string"/>
+	<xs:element name="CHARACTERISTICGROUPCODE" type="xs:string"/>
+	<xs:element name="CHARCODE" type="xs:string"/>
+	<xs:element name="OPERATIONS">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="OPERATIONSEQUENCENR" type="xs:integer"/>
+	<xs:element name="OPERATIONEXECTIME" type="xs:decimal"/>
+	<xs:element name="OPERATIONSTATE">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RESOURCES">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="RESOURCEQUANTITY" type="xs:decimal"/>
+	<xs:element name="RESOURCEPERCENTAGE" type="xs:decimal"/>
+	<xs:element name="RESOURCETYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="NR"/>
+				<xs:enumeration value="BR"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="SUBRESOURCEWHENNEEDED">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="E"/>
+				<xs:enumeration value="B"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="SUBRESOURCETIMENEEDED" type="xs:decimal"/>
+	<xs:element name="RESOURCEPRIORITY" type="xs:integer"/>
+	<xs:element name="OPERATIONCODE" type="xs:string"/>
+	<xs:element name="OPERATIONSTART" type="xs:dateTime"/>
+	<xs:element name="OPERATIONEND" type="xs:dateTime"/>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="PREPTIME" type="xs:decimal"/>
+	<xs:element name="PREPTIMEUNIT">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ARTICLENAME" type="xs:string"/>
+	<xs:element name="OVERLAPTYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="E"/>
+				<xs:enumeration value="P"/>
+				<xs:enumeration value="C"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="OVERLAPQTTY" type="xs:integer"/>
+	<xs:element name="RESOURCE"/>
+	<xs:element name="ARTICLEQTTYUNIT" type="xs:string"/>
+	<xs:element name="OPARTICLEPRODUCEDQTTY" type="xs:decimal"/>
+	<xs:element name="SUBRESOURCETIMENEEDEDUNIT">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="OPPARTITION"/>
+	<xs:element name="OPERATIONEXECTIMEUNIT">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="POLINEPRIORITY" type="xs:integer"/>
+	<xs:element name="POREQUESTDATE" type="xs:date"/>
+	<xs:element name="POPOSSIBLESTARTDATE" type="xs:date"/>
+	<xs:element name="POLINEPOSSIBLESTARTDATE" type="xs:date"/>
+	<xs:element name="NETVALUE" type="xs:double"/>
+	<xs:element name="RESGROUPINDEX" type="xs:integer"/>
+	<xs:element name="OVERLAPQTTYMAX" type="xs:integer"/>
+	<xs:element name="RESOURCEPARTITIONING">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="TUNNELCYCLEID" type="xs:string"/>
+	<xs:element name="NONSEQUENTIALBLOCKID" type="xs:string"/>
+	<xs:element name="AGGRCAPACITYCLASS" type="xs:string"/>
+	<xs:element name="SUBRESOURCEGROUP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBRESOURCEGROUPID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Unique Identifier for this Group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEGROUPPRIORITY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Group Priority.
+Lower means higher priority.
+This is only applicable to Sub-Resource Groups included in OR expressions.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SWITCHALLOWED" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+If not set it will inherit the value from the SWITCHALLOWED tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+If not set it will inherit the value from the CONSIDERFORSUBRESOURCEBLOCKING tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+If not set it will inherit the value from the DISCARDSUBRESOURCEBLOCKINGIFMISSING tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present </xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set.
+If not set it will inherit the value from the CONSIDERFOREXCLUSIVESUBRESGROUPS tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="SUBRESOURCE" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="SUBRESOURCEGROUP" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="SUBRESOURCESETCODE" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Reference to Sub-Resource Groups defined in aps_subres.xml</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="mode">
+				<xs:annotation>
+					<xs:documentation>Defines if needed Sub-Resources should be combined using AND or OR.
+Defaults to AND.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="AND"/>
+						<xs:enumeration value="OR"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SUBRESOURCE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBRESOURCECODE" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEQUANTITY" type="xs:positiveInteger">
+					<xs:annotation>
+						<xs:documentation>Needed Quantity of this Sub-Resource</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEPERCENTAGE" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Required dedication percentage of this Sub Resource
+Value between 0 and 100</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SUBRESOURCEWHENNEEDED">
+					<xs:annotation>
+						<xs:documentation>Type of dedication needed:
+S - Setup;
+E - Execution;
+B - Both;</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SUBRESOURCETIMENEEDED" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Duration of sub-resource usage.
+If subresource is required during all setup or execution time this field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SUBRESOURCETIMENEEDEDUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Measurement unit for SUBRESOURCETIMENEEDED.
+If subresource is required during all setup or execution time this field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEPRIORITY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Priority.
+Lower means higher priority.
+This is only applicable to Sub-Resources included in OR expressions.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SWITCHALLOWED" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+If not set it will inherit the value from the SWITCHALLOWED tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+If not set it will inherit the value from the CONSIDERFORSUBRESOURCEBLOCKING tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set.
+If not set it will inherit the value from the DISCARDSUBRESOURCEBLOCKINGIFMISSING tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present </xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set.
+If not set it will inherit the value from the CONSIDERFOREXCLUSIVESUBRESGROUPS tag from the SUBRESOURCEGROUP and SUBRESOURCESNEEDED nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="PREPTIME" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Preparation Time for this Operation on this Resource when using this Sub-Resource.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PREPTIMEUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Preparation Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="PREPTIMETYPE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Action to be done regarding the preptime vs the one defined at the RESOURCE level:
+R - Replace;
+A - Add or Subtract depending on TIME signal;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="R"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIME" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Execution Time for this Operation on this Resource when using this Sub-Resource.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIMEUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Execution Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIMETYPE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Action to be done regarding the exectime vs the one defined at the RESOURCE level:
+R - Replace;
+A - Add or Subtract depending on TIME signal;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="R"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBRESCALENDARMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if sub-resources and the resource calendars during usage must be an exact match or not.
+Admissible values are:
+A - Both resource and sub-resource calendars must be an exact match during its usage period
+B - Sub-Resource must always be available during the resource usage period, but calendars don't need to be an exact match (sub-resource might end up with unused slots)
+Default value is B</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="B"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

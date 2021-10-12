@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Defines the existing item characteristics as well as it's sorting strategy. These lists are used by the scheduler when sorting operations based on it's characteristics.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="CHARACTERISTICSSORTING">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CHARACTERISTICSGROUP" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>For all characteristics groups indicate its sorting sequence and within each group its characteristics value sequence. This can be used for sorting colors in a dye machine. </xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CHARACTERISTICGROUPID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the characteristic group ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="CHARACTERISTICGROUPCODE">
+								<xs:annotation>
+									<xs:documentation>Characteristic Group Code/Name
+Ex. Color, Diameter, etc.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CHARSEQUENCE">
+								<xs:annotation>
+									<xs:documentation>Determines the sorting strategy. How to choose the next element:
+0  - Linear - After finishing return to the first characteristic;
+1 - Circular - After finishing start from the end;
+2 - Closest - Always gets the nearest characteristic;</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+										<xs:enumeration value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NEXTCHARRESET" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Applicable to multiple characteristics sorting only, it defines how to handle the sorting of the next characteristic when there is a value change in the previous characteristic in the list. Admissible values are:
+0 - Try to find the closest characteristic following the rule defined in CHARSEQUENCE
+1 - Reset the characteristic and start searching from the top of the CHARS list again
+
+Default value is 0</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CHARS">
+								<xs:annotation>
+									<xs:documentation>Possible Characteristic Values for the current Group</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CHAR" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="CHARID" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the characteristic ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="CHARCODE">
+														<xs:annotation>
+															<xs:documentation>Characteristic Code/Value
+Ex. R,W,B, etc.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="CHARNAME">
+														<xs:annotation>
+															<xs:documentation>Characteristic Name/Description
+Ex. Red, White, Black, etc.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CHARACTERISTICCODE" type="xs:string"/>
+	<xs:element name="CHARS">
+		<xs:complexType/>
+	</xs:element>
+	<xs:element name="CHARCODE" type="xs:string"/>
+	<xs:element name="CHARNAME" type="xs:string"/>
+	<xs:element name="CHARACTERISTICSGROUP"/>
+	<xs:element name="CHARACTERISTICGROUPCODE" type="xs:string"/>
+</xs:schema>

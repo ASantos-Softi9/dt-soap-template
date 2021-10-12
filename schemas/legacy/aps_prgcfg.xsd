@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>Configuration file that is used as an input to the scheduler when running a scheduling session.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="PRGCONFIGURATION">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PRGCODE">
+					<xs:annotation>
+						<xs:documentation>Programming ID/Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRGNAME" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Programming Name</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PRGDESCRIPTION" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Programming Description</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PRGCREATIONDT">
+					<xs:annotation>
+						<xs:documentation>Creation Date of this programming configuration</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRGLASTDATAUPDATETIME" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>DateTime of the last update to the aps_pord file data.
+Should only be updated when this file is updated to include the current WIP data. Do not update this tag when the scheduler result is saved since this isn't the purpose for this tag.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRGHORIZONSTARTDT" type="xs:dateTime" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Start Date of the Programming Horizon.
+This value will its seconds portion stripped since the minimum TIMEROUND for the scheduler is 1 minute</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRGHORIZONDAYS" type="xs:positiveInteger">
+					<xs:annotation>
+						<xs:documentation>Scheduling Horizon (in days)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRGPOSTHORIZONDAYS" type="xs:positiveInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Number of days after Scheduling Horizon that will be used to schedule operations for production orders that were partially scheduled inside the horizon (and only for those).
+By default this will have the same value as PRGHORIZONDAYS.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TURNOVERDAYS" type="xs:positiveInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Turnover Period in days.
+Used by Maximize Turnover criteria.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="OPTCRITERIACODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Optimization Criteria to use:
+1 (Minimize Setup Times)
+2 (Minimize Total Waiting Time)
+3 (Minimize Number of Late Jobs (Average Delay))
+4 (Maximize Resource Occupation)
+5 (Minimize Maximum Lateness)
+6 (Minimize Deviation From Delivery Dates)
+7 (Maximize Priority Satisfaction)
+8 (Maximize Turnover)
+9 (Maximize Energy Efficiency)
+10 (Minimize Late Sales Orders)
+20 (Minimize the Total Cycle Time Weighted by Quantity)
+21 (Minimize the Total Cycle Time Weighted by Quantity and Priority)
+22 (Minimize the difference to due dates x Priority)
+23 (Minimize the Total Cycle Time)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="UNTIESORTERS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Use these in case of tie when scheduling</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="UNTIESORTER" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="UNTIESORTERID">
+											<xs:annotation>
+												<xs:documentation>Untie Sorter ID:
+1 (P.O. Possible Start Date)
+2 (P.O. Line Priority)
+3 (P.O. Line Execution Time)
+4 (P.O. Number)
+5 (P.O. Line Planned Quantity)
+6 (Characteristics of Item/Resource)
+7 (Requested End Date)
+8 (Item Code)
+9 (Energetic Characteristic)
+10 (Wait Time from Previous Operations)
+11 (Tool Change Duration)
+12 (Operation Setup Time)
+13 (Operational Due Date)
+14 (Sales Order Code)
+15 (Final Product P.O. Number)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:positiveInteger">
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+													<xs:enumeration value="3"/>
+													<xs:enumeration value="4"/>
+													<xs:enumeration value="5"/>
+													<xs:enumeration value="6"/>
+													<xs:enumeration value="7"/>
+													<xs:enumeration value="8"/>
+													<xs:enumeration value="9"/>
+													<xs:enumeration value="10"/>
+													<xs:enumeration value="11"/>
+													<xs:enumeration value="12"/>
+													<xs:enumeration value="13"/>
+													<xs:enumeration value="14"/>
+													<xs:enumeration value="15"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="UNTIESORTINGORDER">
+											<xs:annotation>
+												<xs:documentation>Untie Sorting Order:
+A (Ascending)
+D (Descending)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="A"/>
+													<xs:enumeration value="D"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="OPTCRITS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Multi-Objective Criteria Configuration</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="OPTCRIT" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="OPTCRITERIACODE">
+											<xs:annotation>
+												<xs:documentation>Optimization Criteria to use:
+1 (Minimize Setup Times)
+2 (Minimize Total Waiting Time)
+3 (Minimize Number of Late Jobs (Average Delay))
+4 (Maximize Resource Occupation)
+5 (Minimize Maximum Lateness)
+6 (Minimize Deviation From Delivery Dates)
+7 (Maximize Priority Satisfaction)
+8 (Maximize Turnover)
+9 (Maximize Energy Efficiency)
+10 (Minimize Late Sales Orders)
+20 (Minimize the sum of Cycle Time x Quantity)
+21 (Minimize the sum of Cycle Time x Quantity x Priority)
+22 (Minimize the difference to due dates x Priority)
+23 (Minimize the Total Cycle Time)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CRITERIAPOND" type="xs:double">
+											<xs:annotation>
+												<xs:documentation>Weight of this criteria in percentage. Sum of all CRITERIAPOND values don't necessarly have to be 100.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="OVERLAPPREPOPTION" type="xs:nonNegativeInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Type of overlap to use:
+0 - Don't overlap preparation times;
+1 - Overlap preparation times;
+Defaults to 0.
+Can be overriden at OPERATION level on aps_pord.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="WAITTIMETYPE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Wait Time Type:
+C - Calendar Time;
+F - Full Time;
+D - Number of midnights;
+
+If C calculates time values using only working period times. If F considers both work and non-working periods.
+
+DEPRECATED - Use the tags defined in aps_pord instead.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ZEROSETUPTIME" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If 1 and there is no change matrix  defined, it will assume a change matrix with the default setup values, but with the diagonal filled with zeros.
+This can be overriden for each characteristic in the aps_chgmatrix file.
+For operations with single characteristics this means filling the diagonal with 0+R, for operations with multiple characteristics this means filling the diagonal of the first characteristic listed in the CHRGRPS with 0+R and filling it with 0+A for all the other characteristics.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PASSMATERIALS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if Material Availability info from Operations should be considered or not:
+1 - Yes;
+0 - No;
+
+If 0 it means the tags OPPOSSIBLESTARTDATE on Operations will be ignored.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="USESTOCHASTIC" type="xs:nonNegativeInteger" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Set this tag to 1 in order to use distribution curves associated with operation and material availability</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="STOCHASTICTIMEOUT" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Timeout in seconds for stochastic scheduling. After this time has passed scheduling will finish, but it will ALWAYS run the current scheduling cycle until the end, it will never exit at the middle of a scheduling cycle.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="STOCHASTICTHREADCOUNT" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Number of Threads that should be used in the stochastic scheduling. Defaults to 1.
+Note that when optimizing if USESTOCHASTIC=1, the optimizer will use n x m threads, where n=THREADCOUNT for Optimizer and m=STOCHASTICTHREADCOUNT.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SCHEDULEBATCHESINRISK" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates if when the delivery date is in risk Batch Jobs should start even if their minimum quantity restriction isn't respected.
+
+false - Always respect the minimum quantity restriction even if delivery date is in risk;
+true - Schedule when delivery date is in risk;
+
+Default value is false.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="GROUPBYMULTIPLECHARS" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This is only applicable when the main OPTCRITERIA=1 and iIf true the scheduler will always try to group similar characteristics together and follow the order defined in aps_charsort regardless of the existance of a setup change matrix by applying a local sorter on each resource. It will untie operations based on their setup times (applying the change matrix if available). If there is a resource currentlly processing an operation with the same characteristics, all operations with matching characteristics will be delayed in order to be scheduled on that resource.
+This rule will be broken when an operation is in risk of becoming delayed.
+It will work in a similar way of when a change matrix doesn't exist.
+
+Default value is false.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CHARSORTLATEOPERATIONSPRIORITYMODE" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This is only applicable when the main OPTCRITERIA=1 and will define which priority should be given to operations that are deemed to be late when sorting by characteristics.
+Admissible values are:
+0 - Always follow the characteristics order
+1 - Late operations should always be given higher priority
+
+Default value is 0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="USEDEFAULTTRANSPORTMATRIX" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If true it means that the default transport matrix will be used for resources/article groups that don't have a specific matrix defined.
+If false transport times will be 0 on those cases.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CALCSEGMENTEDKPIS" type="xs:boolean" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates whether the scheduling engine should calculate segmented KPIs instead of global KPIS.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SEGMENTEDDAYS" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Represents the number of days counting from the beginning of the scheduling horizon that will be considered for segmented KPI calculation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PLANNERSLOTDURATION" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Duration for each planning slot. This will be used by the Planner only and ignored by the Scheduler.
+The unit is defined in the AGGRCAPACITYUNIT tag.
+Defaults to 1.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AGGRCAPACITYUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Capacity Unit to consider on higher level Planning.
+D - Day
+W - Week
+O - Month
+Defaults to "W".</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="W"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="LOOKAHEADMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>In some situations the scheduler needs to look ahead on the timeline to predict if a POLine might become at risk of being delivered before its request date.
+This mode defines the type of look ahead that will be done.
+Admissible values ar:
+1 - No Look-Ahead. No look ahead is done, prediction is made simply based on the current timestamp and the operation setup+execution times.
+10 - Moderate Look-Ahead. Prediction is made based on operation times and also current calendar of the selected resource (excluding capacity changes).
+
+Default value is 1.
+Higher modes will mean worst performance for the algorithm since it requires more processing. For large sets of short timed operations normally the default mode is good enough.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="10"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SCHEDULINGBETWEENFIXEDOPS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines how the algorithm will handle scheduling operations that are both preceeded and followed by fixed operations.
+Allowed values are:
+0 - Do not schedule;
+1 - Schedule as maximum priority;
+2 - Schedule using the normal rules/priorities;
+Default value is 0</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="2"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SCHEDULINGMAXWAITTIMES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines how the algorithm will handle scheduling operations with hard constraints  of maximum waiting times.
+Allowed values are:
+1 - Schedule as maximum priority;
+2 - Schedule using the normal rules/priorities;
+Default value is 1</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="2"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="LOGLEVEL" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Threshold level for logging. Defaults to ERROR.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="ALL"/>
+							<xs:enumeration value="DEBUG"/>
+							<xs:enumeration value="INFO"/>
+							<xs:enumeration value="WARN"/>
+							<xs:enumeration value="ERROR"/>
+							<xs:enumeration value="FATAL"/>
+							<xs:enumeration value="OFF"/>
+							<xs:enumeration value=""/>
+							<xs:enumeration value=""/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="TIMEROUND" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>In minutes. The minimum slot dimension to be considered by the scheduler.
+If you set this to 5 it means that operation times will have at least 5 minutes, ie a 2 minute operation will be treated as a 5 minute one.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FREEZINGPERIOD" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the freezing period the algorithm should be used. Period starts at the beginning of the scheduling horizon.
+All operations previously scheduled that start inside this period will be considered fixed for the current scheduling session (depending on FREEZINGPERIODMODE tag value).
+Set a negative value to freeze all previously scheduled operations.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FREEZINGPERIODUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Time Unit used for FREEZINGPERIOD.
+Admissible values are:
+M - Minutes
+H- Hours
+D - Days
+Defaults to Days</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="M"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="D"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="FREEZINGPERIODMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines how operations from previous scheduling session will  be treated when inside the freezing period. Admissible values are:
+0 - Fixate all operations
+1 - Re-schedule the operations, but maintain their assigned resources and scheduled order
+2 - Same as 1, but operations that can't be scheduled due to newly added non-working periods can be scheduled in their alternative resources
+
+Defaults to 0</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="2"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="FREEZINGPERIODSUBRESMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Applicable when FREZZINGPERIODMODE != 0 only.
+Defines how previously assigned sub-resources will be treated for operations inside the freezing period. Admissible values are:
+0 - Freely reschedule the sub-resources
+1 - Try to maintain the previously assigned sub-resources when possible
+
+Defaults to 1</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="STARTEDOPSENDTIMESCHEDULE" type="xs:int" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines what happens if the OPERATIONEND tag of operations with OPERATIONSTATE=3 is filled.
+Admissible values are:
+0 - Don't schedule end date and use the one in the OPERATIONEND tag;
+1 - Schedule the end date ignoring the existing value;
+The default value is 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ERRORONMAXOPSLIMIT" type="xs:int" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If set to 1 if the scheduler should throw an Exception when trying to use a demo license on data sets that have more operations than the maximum amount permited under demo mode.
+If set to 0 the scheduler will proceed normally, but only that amount of operations will be scheduled.
+Default value is 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="IGNORECHARSORTORDER" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Set this to 1 if the order of the characteristics is irrelevant when using a characteristics untie sorter.
+This will cause the scheduler to only try to group together operations with the same characteristic, but it won't try to follow the order defined in aps_charsort afterwards.
+This can also be set for a specific resource only in aps_res.
+Default value is 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="KPIAGGREGATIONMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This defines how the data set of this programming is organized, admissible values are:
+1 - By Production Order (Default)
+2 - By POLine
+
+This is only used by the optimizer in order to be possible to compare multiple solutions since depending on the aggregation used different KPIs should be used (For instance KPI 501 instead of 502)</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="1"/>
+							<xs:enumeration value="2"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DEMOMODEIFNOKEY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates if APS should run in demo mode if no key is found.
+Admissible Values are:
+0 - No;
+1 - Yes (Default);</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SCHEDULINGTIMEOUT" type="xs:long" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Timeout  (in seconds) after which and exception will be thrown if the scheduler has still not finished running.
+If not defined the scheduler will keep running until completion.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="BUFFERSENABLED" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>This provides an easy way to enable/disable Buffers globally without needing to alter any XML files. Admissible values are:
+0 - Buffers Disabled (Default)
+1 - Buffers Enabled
+
+Beware that if you aren't using any buffers you should set this to 0 otherwise there might be a small performance hit since the algorithm will assign infinite output buffers for each resource internally</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ALLOWFUTUREWIPOPS" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>By default the scheduler requires WIP operations (OPERATIONSTATE=3) to have its start date before the beginning of the scheduling horizon and an exception will be thrown if this condition isn't met. This tag allows for WIP operations to start after the beginning of the scheduling horizon. This is only supported in order to keep compatibility with some legacy integration systems, it's not recommended to have WIP operations to start in the future since it doesn't make sense. Admissible values are:
+0 - Don't allow WIP operations in the future
+1 - Allow WIP operations in the future
+
+Default value is 0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FINALPRODUCTDETECTIONMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines how the scheduler will detect if a POLINE is a final product. Admissible values are:
+0 - POLINE has no successors
+1- Last operation of the POLINE has no successors
+
+Default value is 0</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBRESOURCESORTERS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Custom Sub-Resource Sorter definition to use on operations scheduled on any resource. By default sub-resources are sorted by their priority, but in certain situations it might be desired to use a different rule, this tag allows for different sorting methods to be defined.
+This setting can also be changed on a per resource basis on aps_res</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SUBRESOURCESORTER" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>The sub-resource sorter to use, ordered by priority.
+
+Admissible values are:
+1 - Priority
+2 - POLine
+3 - Resource
+
+If nothing is specified a single SUBRESOURCESORTER with value 1 will be used (Priority sorting).
+
+- POLine will try to minimize sub-resource changes from the last scheduled operation in the same POLine
+- Resource will try to minimize sub-resource changes from the last operation scheduled on this resource</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:int">
+										<xs:enumeration value="1"/>
+										<xs:enumeration value="2"/>
+										<xs:enumeration value="3"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OPTCRITERIACODE">
+		<xs:simpleType>
+			<xs:restriction base="xs:positiveInteger">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+				<xs:enumeration value="5"/>
+				<xs:enumeration value="6"/>
+				<xs:enumeration value="7"/>
+				<xs:enumeration value="8"/>
+				<xs:enumeration value="9"/>
+				<xs:enumeration value="10"/>
+				<xs:enumeration value="20"/>
+				<xs:enumeration value="21"/>
+				<xs:enumeration value="22"/>
+				<xs:enumeration value="23"/>
+				<xs:enumeration value="999"/>
+				<xs:enumeration value="1000"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="PRGDESCRIPTION" type="xs:string"/>
+	<xs:element name="PRGCREATIONDT" type="xs:dateTime"/>
+	<xs:element name="PRGCODE" type="xs:string"/>
+	<xs:element name="PROGHORIZONDAYS" type="xs:positiveInteger"/>
+	<xs:element name="WAITTIMETYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="C"/>
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="F"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ZEROSETUPTIME" type="xs:nonNegativeInteger"/>
+	<xs:element name="PASSMATERIALS" type="xs:nonNegativeInteger"/>
+</xs:schema>

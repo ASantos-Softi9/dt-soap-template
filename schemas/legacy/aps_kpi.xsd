@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Luís Miguel Guardão (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>Scheduler Key Performance Indicators definition. The contents of this file are filled by the scheduler after each scheduling session is finished.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="INDICATORS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="INDICATORSGROUPS">
+					<xs:annotation>
+						<xs:documentation>Contains all Indicator Groups</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="GLOBALINDICATORS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicators that are global to the whole solution</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="INDICATORSGROUPS">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="INDICATORSGROUP" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="INDICATORCODE" type="xs:string"/>
+	<xs:element name="INDICATORVALUE" type="xs:decimal"/>
+	<xs:element name="INDICATORSGROUPCODE" type="xs:string"/>
+	<xs:element name="INDICATORSGROUP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="INDICATORSGROUPCODE">
+					<xs:annotation>
+						<xs:documentation>Code for the Indicators group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATOR" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Indicators for this group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="INDICATOR">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="INDICATORCODE">
+					<xs:annotation>
+						<xs:documentation>Indicator Code:
+101 (Production Time)
+102 (Setup Time)
+103 (Inactivity Time)
+104 (Stoppages Time)
+201 (Anticipated Start Date ProdOrders/POLines Percentage) (*)
+202 (Late ProdOrders/POLines Percentage) (*)
+203 (Average Delay Days) (*)
+204 (Maximum Delay Date) (*)
+205 (Average Anticipation in Delivery Date) (*)
+206 (Maximum Anticipation in Delivery Date) (*)
+207 (Priority Weighted Average Delay Days) (*)
+208 (Number of Anticipated Start Date) (*)
+209 (Number of Late ProdOrders/POLines) (*)
+210 (Number of Anticipated Delivery Date ProdOrders/POLines) (*)
+211 (Anticipated Delivery Date Percentage) (*)
+301 (Average Lead Time) (*)
+302 (Average Wait Time) (*)
+303 (Average Cycle Time x Quantity) (*)
+304 (Average Priority Weighted Cycle Time x Quantity) (*)
+401 (% of Outsourcing Time relative to operations that can be outsourced)
+402 (% of Total Outsourcing Time)
+501 (Priorities Satisfaction Degree) (*)
+601 (Turnover) (*)
+701 (Resources Energy Efficiency)
+702 (Operations Energy Efficiency)
+901 (Late Sales Order Percentage)
+902 (Sales Order Maximum Lateness)
+
+(*) - These KPIs consider Production Orders or POLines depending on the value defined for KPIAGGREGATIONMODE at aps_prgcfg</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORVALUE">
+					<xs:annotation>
+						<xs:documentation>Indicator Value
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORNORMVALUE">
+					<xs:annotation>
+						<xs:documentation>Normalized Indicator Value (Always between 0 and 1)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORMAXVALUE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicator Maximum Value.
+Only applicable when using a stochastic behaviour.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORNORMMAXVALUE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Normalized Indicator Maximum Value (Always between 0 and 1).
+Only applicable when using a stochastic behaviour.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORMINVALUE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicator Minimum Value.
+Only applicable when using a stochastic behaviour.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="INDICATORNORMMINVALUE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Normalized Indicator Minimum Value (Always between 0 and 1).
+Only applicable when using a stochastic behaviour.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="INDICATORNORMVALUE" type="xs:decimal"/>
+	<xs:element name="INDICATORMAXVALUE" type="xs:decimal"/>
+	<xs:element name="INDICATORNORMMAXVALUE" type="xs:decimal"/>
+	<xs:element name="INDICATORMINVALUE" type="xs:decimal"/>
+	<xs:element name="INDICATORNORMMINVALUE" type="xs:decimal"/>
+	<xs:element name="GLOBALINDICATORS">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="QUALITY" type="xs:decimal">
+					<xs:annotation>
+						<xs:documentation>Quality of the solution. Value between 0 and 1.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ROBUSTNESS" type="xs:decimal">
+					<xs:annotation>
+						<xs:documentation>Robustness of the solution. Value between 0 and 1.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

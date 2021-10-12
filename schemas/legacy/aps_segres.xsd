@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Luís Miguel Guardão (INESC Porto) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>This file is used to configure which resources you want to include when calculating segmented KPIs.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="SEGRESOURCES">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="INCLUDERESOURCES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>List of Resource Codes to include in segmented KPI calculation.
+By default all resources are included.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="SEGRESOURCECODE" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Resource Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="EXCLUDERESOURCES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>List of Resource Codes to exclude from segmented KPI calculation.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="SEGRESOURCECODE" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Resource Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

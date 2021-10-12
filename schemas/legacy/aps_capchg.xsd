@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 sp1 (http://www.altova.com) by Luis Lima (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Define Capacity Changes on this file. Stoppage times are also considered capacity changes (capacity change to 0) so define those here as well.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="CAPACITYCHANGES">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CAPACITYCHANGE" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="CHANGEDESCRIPTION">
+								<xs:annotation>
+									<xs:documentation>Description for this Capacity Change</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="CHANGESTARTTIME">
+								<xs:annotation>
+									<xs:documentation>Change Capacity Start Date Time</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="CHANGEENDTIME">
+								<xs:annotation>
+									<xs:documentation>Change Capacity End Date Time</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="CHANGETYPE">
+								<xs:annotation>
+									<xs:documentation>Type of this Capacity Change:
+STP - Stoppage;
+CCH - Capacity Change;</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="RESOURCES" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Resources affected by this capacity change.
+If CHANGETYPE = STP and this field is not filled it means tha the stoppage condition applies to all resources.
+If CHANGETYPE = CCH this field is mandatory.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="RESOURCE" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="RESOURCECODE">
+														<xs:annotation>
+															<xs:documentation>Resource Code</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="RESOURCEQUANTITY" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The new quantity of homogeneous resources;
+This only needs to be filled when CHANGETYPE = CCH;
+A change in RESOURCEQUANTITY from 3 to 2 means it will take 3/2 of the time to perform the operation</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CHANGEDESCRIPTION" type="xs:string"/>
+	<xs:element name="CHANGESTARTTIME" type="xs:dateTime"/>
+	<xs:element name="CHANGEENDTIME" type="xs:dateTime"/>
+	<xs:element name="CHANGETYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="STP"/>
+				<xs:enumeration value="CCH"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="RESOURCEQUANTITY" type="xs:integer"/>
+	<xs:element name="RESOURCES">
+		<xs:complexType/>
+	</xs:element>
+</xs:schema>

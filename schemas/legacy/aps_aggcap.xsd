@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 sp1 (http://www.altova.com) by Luis Lima (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Configures aggregated capacity classes, this is used only in higher level resources and defines how many units of a certain article group can be produced on each resource within the specified time unit.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="AGGRCAPACITIES">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AGGRCAPACITY" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AGGRCAPACITYCLASSCODE" type="xs:string"/>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="AGGRCAPACITY">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="RESOURCECODE">
+					<xs:annotation>
+						<xs:documentation>Resource Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AGGCAPACITYCLASSES">
+					<xs:annotation>
+						<xs:documentation>Each article has an associated aggregated capacity class. For each resource it represents how many pieces can be produced in a certain inteval (Interval unit defined in aps_prgcfg)</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="AGGCAPACITYCLASS" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="AGGRCAPACITYCLASSCODE">
+											<xs:annotation>
+												<xs:documentation>ID/Code of this Aggregated Capacity Class.
+This is defined on aps_pord at the same level as ARTICLEGROUP.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="AGGRCAPACITYCLASSVALUE">
+											<xs:annotation>
+												<xs:documentation>Value/Quantity for this Aggregated Capacity Class.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AGGRCAPACITYCLASSVALUE" type="xs:integer"/>
+</xs:schema>

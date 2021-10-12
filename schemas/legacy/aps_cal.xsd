@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Luís Miguel Guardão (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>Calendar Definition. In this file we can define all the existing shifts as well as a calendar per year. A calendar can be represented by several working (manufacturing) and non-working (holiday) periods.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="CALENDARS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CALENDARYEAR" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Represents a Year</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SHIFTS">
+					<xs:annotation>
+						<xs:documentation>Definition of shifts for this calendar</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALENDAR">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CALENDARTYPE">
+					<xs:annotation>
+						<xs:documentation>Defines the Calendar Type:
+S - Specific Calendar;
+G - Generic Calendar;
+(Use only one G for each year)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALENDARCODE">
+					<xs:annotation>
+						<xs:documentation>Code for this Calendar.
+Can be repeated in different years</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALENDARNAME">
+					<xs:annotation>
+						<xs:documentation>Calendar Name</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALINTERVALS">
+					<xs:annotation>
+						<xs:documentation>Definition of this Calendar Working/Non-Working Intervals
+In case of Working Intervals, if overlapping intervals are defined for some days the last interval defined in the XML will tak priority over the previous ones.
+This allows to easily define a full year celendar and then add exception CALINTERVALs for specific days after that one.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALENDARCODE" type="xs:string"/>
+	<xs:element name="CALENDARTYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="S"/>
+				<xs:enumeration value="G"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CALENDARNAME" type="xs:string"/>
+	<xs:element name="CALENDARYEAR">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CALENDARYEARNUM">
+					<xs:annotation>
+						<xs:documentation>Year number</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALENDAR" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALENDARYEARNUM" type="xs:integer"/>
+	<xs:element name="CALSTARTDAY" type="xs:date"/>
+	<xs:element name="CALENDDAY" type="xs:date"/>
+	<xs:element name="SHIFT">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SHIFTCODE">
+					<xs:annotation>
+						<xs:documentation>Shift Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SHIFTNAME">
+					<xs:annotation>
+						<xs:documentation>Shift Name</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SHIFTINTERVALS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If a non working day there should be no intervals</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="SHIFTINTERVAL" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SHIFTCODE" type="xs:string"/>
+	<xs:element name="SHIFTSTART" type="xs:string"/>
+	<xs:element name="SHIFTINTERVAL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SHIFTSTART">
+					<xs:annotation>
+						<xs:documentation>Shift Start time in format HH:MM:SS
+Note: Midnight should be represented as 00:00 or 23:59. but never as 24:00</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SHIFTEND">
+					<xs:annotation>
+						<xs:documentation>Shift End time in format HH:MM:SS
+Note: Midnight should be represented as 00:00 or 23:59. but never as 24:00</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SHIFTNAME" type="xs:string"/>
+	<xs:element name="SHIFTEND" type="xs:string"/>
+	<xs:element name="WEEKDAYSHIFT">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="WEEKDAYCODE">
+					<xs:annotation>
+						<xs:documentation>Day of week:
+0 (Sunday)
+1 (Monday)
+2 (Tuesday)
+3 (Wednesday)
+4 (Thursday)
+5 (Friday)
+6 (Saturday)
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="SHIFTCODE">
+					<xs:annotation>
+						<xs:documentation>Shift Code to use for this week day</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SHIFTS">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SHIFT" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALINTERVAL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CALINTERVALTYPE">
+					<xs:annotation>
+						<xs:documentation>Type of this Interval:
+H - Holiday;
+M - Manufacturing;
+
+At least one M interval is mandatory;
+H intervals are optional;</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALSTARTDAY">
+					<xs:annotation>
+						<xs:documentation>Start date for this Calendar</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="CALENDDAY">
+					<xs:annotation>
+						<xs:documentation>End date for this Calendar</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="WEEKDAYINFO" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Definition of shifts per week day. Only applicable to M interval types</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALINTERVALS">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CALINTERVAL" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CALINTERVALTYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="WEEKDAYINFO">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="WEEKDAYSHIFT" maxOccurs="7">
+					<xs:annotation>
+						<xs:documentation>Each WEEKDAYSHIFT Entry represents a day of the week.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WEEKDAYCODE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="0"/>
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+				<xs:enumeration value="5"/>
+				<xs:enumeration value="6"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

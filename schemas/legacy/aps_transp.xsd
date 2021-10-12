@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Luís Miguel Guardão (INESC Porto) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Transport times definition. Defines the transport times between resources</xs:documentation>
+	</xs:annotation>
+	<xs:element name="TRANSPORTCONFIG">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TRANSPORTTIMES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Transport Times Definition.
+Only applicable to transport resources of type taxi</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TRANSPORTTIMESMATRIX" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>For each article group or for each transport resource it defines the transportation times between loading docks or resources.
+You can also have one global transportation matrix that isn't dependent on article groups or transport resources, to define it simply do not add the ARTICLEGROUP or TRRESOURCECODE tags,</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ARTICLEGROUP" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Article Group to which the matrix applies to.
+To define a global matrix that isn't dependent on article groups, simply do not add this tag.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRESOURCECODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Transport resource code. If defined the matrix applies only to this TR resource code. If not defined it will be applied to all transport resources with TRESOURCEWORKMODE=1</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESCHANGES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Resource Changes definition.
+Transport Times between Resources (These can be used for transportation between resources inside the same Loading Dock)</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="RESCHANGE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="RESCODEFROM">
+																	<xs:annotation>
+																		<xs:documentation>Source Resource Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TRANSPORTTIMECHANGES">
+																	<xs:annotation>
+																		<xs:documentation>Defines transport time changes when operation moves from resource RESCODEFROM to RESCODETO.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="TRANSPORTTIMECHANGE" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element ref="RESCODETO">
+																							<xs:annotation>
+																								<xs:documentation>Target Resource Code</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="TIME" type="xs:integer">
+																							<xs:annotation>
+																								<xs:documentation>Transaction time for the represented RESCODEFROM-RESCODETO pair.
+Default value is 0.
+Set to a negative value when transportation isn't possible.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element ref="TIMEUNIT">
+																							<xs:annotation>
+																								<xs:documentation>Measurement unit for the value represented in TIME:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="DOCKCHANGES" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Loading Dock Changes definition.
+Transport Times between Loading Docks</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="DOCKCHANGE" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="DOCKCODEFROM" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Source Loading Dock Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TRANSPORTTIMECHANGES">
+																	<xs:annotation>
+																		<xs:documentation>Defines transport time changes when operation moves from resource DOCKCODEFROM to DOCKCODETO.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="TRANSPORTTIMECHANGE" maxOccurs="unbounded">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="DOCKCODETO" type="xs:string">
+																							<xs:annotation>
+																								<xs:documentation>Target Loading Dock Code</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="TIME" type="xs:integer">
+																							<xs:annotation>
+																								<xs:documentation>Transaction time for the represented DOCKCODEFROM-DOCKCODETO pair.
+Default value is 0.
+Set to a negative value when transportation isn't possible.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element ref="TIMEUNIT">
+																							<xs:annotation>
+																								<xs:documentation>Measurement unit for the value represented in TIME:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TRANSPORTEVENTCONFIGS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Discrete Transport Event Configurations</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TRANSPORTEVENTCONFIG" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TRESOURCECODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Transport resource code. If not defined events will be applied to all transport resources with TRESOURCEWORKMODE=3</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRANSPORTEVENTS">
+											<xs:annotation>
+												<xs:documentation>Discrete transport events for the defined transport resource.
+The events on this list should appear in the order they happen in time (ie sorted by EVENTTIMESTAMP)</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="TRANSPORTEVENT" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="DOCKCODE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Dock Code where the event occurrs</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="EVENTTIMESTAMP" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>Timestamp of the event</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="EVENTTYPE" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The type of the event:
+0 - Delivery
+1 - Pickup
+2 - Both Delivery and Pickup
+Default value is 2.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:enumeration value="0"/>
+																			<xs:enumeration value="1"/>
+																			<xs:enumeration value="2"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ARRIVALTIMES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Arrival Times Definition</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ARRIVALTIME" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>This will define the average time that takes for each transport resource to arrive to each resource after a transport request has been made.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TRESOURCECODE" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Transport resource code. If defined the times are appliesd only to this TR resource code.
+If not defined then the times will be applicable to all existing transport resources.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RESTIMES">
+											<xs:annotation>
+												<xs:documentation>The average arrival times for each resource</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence maxOccurs="unbounded">
+													<xs:element name="RESTIME">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="RESCODE" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Resource Code</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TIME" type="xs:integer">
+																	<xs:annotation>
+																		<xs:documentation>Average time that takes for the transport resource to arrive to the resource represented by RESCODE.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="TIMEUNIT">
+																	<xs:annotation>
+																		<xs:documentation>Measurement unit for the value represented in TIME:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DOCKS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Loading Dock definition.
+A Loading Dock defines the location of a Resource where materials are dropped/picked.
+One Loading Dock can serve several Resources.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DOCK" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="DOCKCODE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Loading Dock Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DOCKNAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Loading Dock Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TRANSPORTRESOURCES">
+					<xs:annotation>
+						<xs:documentation>Transport Resources definition</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TRANSPORTRESOURCE" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TRESOURCEID" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>This field isn't used by the scheduler and should be used for integration purposes only.
+You can store the transport resource ID from the ERP/System you are integrating with here for easier reference.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRESOURCECODE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Transport Resource Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRESOURCENAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Transport Resource Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CALENDARCODE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Calendar Code to use for this Resource. From aps_cal.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TRESOURCETYPECODE">
+											<xs:annotation>
+												<xs:documentation>Transport Resource Type Code:
+1 (AGV)
+2 (ForkLift)
+3 (Truck)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+													<xs:enumeration value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="TRESOURCEWORKMODE">
+											<xs:annotation>
+												<xs:documentation>Transport resource work mode. Defines the behaviour of the transport resource when performing transport movements between loading docks. Supported work modes are:
+1 - Taxi
+2 - Milkrun
+3 - Discrete</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+													<xs:enumeration value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="CONTAINERCAPACITY" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Amount of containers that this transport resource can transport at the same time.
+1 Container = 1 Operation.
+If not set infinite capacity will be considered</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ARTICLEGROUP" type="xs:string"/>
+	<xs:element name="RESCODETO" type="xs:string"/>
+	<xs:element name="RESCODEFROM" type="xs:string"/>
+	<xs:element name="TIME" type="xs:integer"/>
+	<xs:element name="TIMEUNIT">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

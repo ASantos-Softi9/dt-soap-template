@@ -1,6 +1,57 @@
 # DT SOAP Template
 
+## Getting started
 
+The first thing to always do when using Python is to create a virtual environment for the project to install its packages:
+```
+$ pipenv shell
+```
+Then you need to install the packages declared in the Pipfile:
+```
+$ pipenv install
+```
+(Optional) Create a .env file from .env.example:
+```
+$ mv .env.example .env
+```
+Now you are ready to run the project:
+```
+$ cd src
+
+!!! Your current shell directory has to be /src before running the following command !!!
+
+$ pipenv run flask run
+```
+
+## Creating and Running Docker Container
+
+Create the Docker Image from the Dockerfile:
+```
+$ docker build . --tag name_your_image_here
+```
+
+Create and Run a container from the image created in the previous step:
+```
+$ docker run -p 5000:5000 name_your_image_here
+```
+
+## Dependencies used in this project
+
+- [flask | micro framework for building web applications](https://flask.palletsprojects.com/en/2.0.x/)
+
+- [spyne | Spyne is a Python RPC toolkit that makes it easy to expose online services that have a well-defined API using multiple protocols and transports](https://github.com/arskom/spyne)
+
+## Useful Links
+
+- [SoapUI is the entry point for API testing so you can validate REST & SOAP-based web services with ease](https://www.soapui.org/tools/soapui/)
+
+- [Best Practices in API Design](https://swagger.io/resources/articles/best-practices-in-api-design/)
+
+- [SOAP vs REST 101: Understand The Differences](https://www.soapui.org/learn/api/soap-vs-rest-api/)
+
+- [This document describes the Web Services Description Language Version 2.0 (WSDL 2.0), an XML language for describing Web services](https://www.w3.org/TR/2007/REC-wsdl20-20070626/)
+
+# Gitlab Usage Instructions
 
 ## Getting started
 

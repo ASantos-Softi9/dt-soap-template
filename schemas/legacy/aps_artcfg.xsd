@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="ARTICLECONFIG">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AGGREGATIONCLASSES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Aggregation Classes Definition</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="AGGREGATIONCLASS" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="AGGREGATIONCLASSCODE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Aggregation Class Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AGGREGATIONCLASSNAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Aggregation Class Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CAPACITYCLASSES" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Capacity Classes Definition</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CAPACITYCLASS" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CAPACITYCLASSCODE" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Capacity Class Code</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CAPACITYCLASSNAME" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Capacity Class Name</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

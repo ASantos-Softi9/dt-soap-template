@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Luís Miguel Guardão (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Characteristics change matrix definition. This will define the changes in preparation times produced by the change from a certain characteristic value to another.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="CHARMATRIX">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="RESOURCECHARMATRIX" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>For each resource it defines which characteristic group ( Ex. Color  or Diameter ) is used for sequence sorting. Specifies preptimes when characteristics values change in the resource.
+You can have only one  CHARACTERISTICGROUPCODE for a RESOURCE, e.g., the resource cannot be repeated inside RESOURCECHARMATRIX.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="RESOURCECODE">
+								<xs:annotation>
+									<xs:documentation>Resource Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="CHARACTERISTICGROUPCODE">
+								<xs:annotation>
+									<xs:documentation>Characteristic Group Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DEFAULTTIME" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Default transaction time for the transactions that aren't present in the change matrix (or when the change matrix doesn't exist)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DEFAULTTIMEUNIT" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Measurement unit for the value represented in DEFAULTTIME:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="D"/>
+										<xs:enumeration value="H"/>
+										<xs:enumeration value="M"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DEFAULTPREPTIMETYPE" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Action to be done regarding the preptime:
+R - Replace;
+A - Add or Subtract depending on TIME signal;</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="R"/>
+										<xs:enumeration value="A"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ZEROSETUPTIME" type="xs:nonNegativeInteger" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>If 1 and there is no change matrix  defined, it will assume a change matrix with the default setup values, but with the diagonal filled with zeros.
+For operations with single characteristics this means filling the diagonal with 0+R, for operations with multiple characteristics this means filling the diagonal of the first characteristic listed in the CHRGRPS with 0+R and filling it with 0+A for all the other characteristics.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CHARCHANGES" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Characteristic Changes definition</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CHARCHANGE" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="CHARCODEFROM">
+														<xs:annotation>
+															<xs:documentation>Source Characteristic Code</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="PREPTIMECHANGES">
+														<xs:annotation>
+															<xs:documentation>Defines preptime changes when characteristics change from CHARCODEFROM to CHARCODETO on the current resource</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="PREPTIMECHANGE" maxOccurs="unbounded">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="CHARCODETO">
+																				<xs:annotation>
+																					<xs:documentation>Target Characteristic Code</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="TIME">
+																				<xs:annotation>
+																					<xs:documentation>Transaction time for the represented CHARCODEFROM-CHARCODETO pair</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="TIMEUNIT">
+																				<xs:annotation>
+																					<xs:documentation>Measurement unit for the value represented in TIME:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="PREPTIMETYPE">
+																				<xs:annotation>
+																					<xs:documentation>Action to be done regarding the preptime:
+R - Replace;
+A - Add or Subtract depending on TIME signal;
+I - Incompatible;</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="CHARACTERISTICGROUPCODE" type="xs:string"/>
+	<xs:element name="CHARCODETO" type="xs:string"/>
+	<xs:element name="CHARCODEFROM" type="xs:string"/>
+	<xs:element name="TIME" type="xs:decimal"/>
+	<xs:element name="TIMEUNIT">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="D"/>
+				<xs:enumeration value="H"/>
+				<xs:enumeration value="M"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="PREPTIMETYPE">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="R"/>
+				<xs:enumeration value="A"/>
+				<xs:enumeration value="I"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 sp1 (http://www.altova.com) by Luis Lima (INESC Porto) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Aggregated Capacity Class efficiency change matrix definition. This will define the changes in the resource efficiency produced by the change from a certain aggregated capacity class to another.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="AGGRCLASSMATRIX">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="RESAGGRCLASSMATRIX" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>For each resource it defines the penalty in percentage that will be applied to the resource capacity when changing from one aggregated capacity class to another.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="RESOURCECODE">
+								<xs:annotation>
+									<xs:documentation>Resource Code</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AGGRCLASSCHANGES">
+								<xs:annotation>
+									<xs:documentation>Characteristic Changes definition</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="AGGRCLASSCHANGE" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="AGGRCAPACITYCLASSCODEFROM">
+														<xs:annotation>
+															<xs:documentation>Source Aggregated Capacity Class Code</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="EFICIENCYCHANGES">
+														<xs:annotation>
+															<xs:documentation>Defines eficiency changes (or penalty) when the aggregated capacity class changes from AGGRCAPACITYCLASSCODEFROM to AGGRCAPACITYCLASSCODETO on the current resource.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="EFICIENCYCHANGE" maxOccurs="unbounded">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="AGGRCAPACITYCLASSCODETO">
+																				<xs:annotation>
+																					<xs:documentation>Target Aggregated Capacity Code</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="EFFICIENCYCHANGE">
+																				<xs:annotation>
+																					<xs:documentation>Efficiency Change for the represented AGGRCAPACITYCLASSCODEFROM-AGGRCAPACITYCLASSCODETO pair.
+Value in percentage, allows negative percentages.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RESOURCECODE" type="xs:string"/>
+	<xs:element name="AGGRCAPACITYCLASSCODETO" type="xs:string"/>
+	<xs:element name="AGGRCAPACITYCLASSCODEFROM" type="xs:string"/>
+	<xs:element name="EFFICIENCYCHANGE" type="xs:integer"/>
+</xs:schema>

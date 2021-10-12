@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Eunice Maria Ferreira (INESC PORTO - INSTITUTO DE ENGENHARIA DE SISTEMAS E COMPUTADORES DO PORTO) -->
+<!-- edited with XMLSpy v2007 rel. 3 sp1 (http://www.altova.com) by Luis Lima (INESC Porto) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Defines the Energy Labels to use on resources</xs:documentation>
+	</xs:annotation>
+	<xs:element name="ENERGYLABELS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="ENERGYLABEL"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ENERGYLABEL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ENERGYLABELCODE" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Energy Class Code (From A to Z)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ENERGYLABELPERF" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Energy Lable Performance Description</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ENERGYLABELCONS" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Energy Label Consumption (Percentage Value)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ENERGYLABELVALUE" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Energy Label value used for calculation of related indicator values</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>Listing with all input files accepted by the scheduler</xs:documentation>
+	</xs:annotation>
+	<xs:element name="aps_files">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="aps_bmg">
+					<xs:annotation>
+						<xs:documentation>Configures existing Batch Managers. For each resource it will define its capacity per capacity class types as well as the valid aggregation classes and the compatible batch cycles.
+
+Mapped to class aps_bmg.BATCH_MANAGERSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_cal">
+					<xs:annotation>
+						<xs:documentation>Calendar Definition. In this file we can define all the existing shifts as well as a calendar per year. A calendar can be represented by several working (manufacturing) and non-working (holiday) periods.
+
+Mapped to class aps_cal.CALENDARSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_capchg">
+					<xs:annotation>
+						<xs:documentation>Define Capacity Changes on this file. Stoppage times are also considered capacity changes (capacity change to 0) so define those here as well.
+
+Mapped to class aps_capchg.CAPACITYCHANGESType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_charsort">
+					<xs:annotation>
+						<xs:documentation>Defines the existing item characteristics as well as its sorting strategy. These lists are used by the scheduler when sorting operations based on its characteristics.
+
+Mapped to class aps_charsort.CHARACTERISTICSSORTINGType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_chgmatrix">
+					<xs:annotation>
+						<xs:documentation>Characteristics change matrix definition. This will define the changes in preparation times produced by the change from a certain characteristic value to another.
+
+Mapped to class aps_chgmatrix.CHARMATRIXType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_encharsort">
+					<xs:annotation>
+						<xs:documentation>Defines the existing energetic characteristics that can be used on Operations as well as it's sorting strategy.
+
+Mapped to class aps_encharsort.CHRENERGYGRPSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_enchgmatrix">
+					<xs:annotation>
+						<xs:documentation>Energetic Characteristics change matrix definition. This will define the transaction energetic costs produced by the change from a certain energetic characteristic value to another.
+
+Mapped to class aps_enchgmatrix.ENERGYMATRIXType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_enlbl">
+					<xs:annotation>
+						<xs:documentation>Defines the Energy Labels to use on resources.
+
+Mapped to class aps_enlbl.ENERGYLABELSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_kpi">
+					<xs:annotation>
+						<xs:documentation>Scheduler Indicators definition. The contents of this file are filled by the scheduler after each scheduling session is finished.
+
+Mapped to class aps_kpi.INDICATORSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_msg">
+					<xs:annotation>
+						<xs:documentation>File used by the scheduler to log several information and error messages.
+
+Mapped to class aps_msg.DATAINFOType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_optcfg">
+					<xs:annotation>
+						<xs:documentation>Configuration file that is used as an input to the scheduler when running an Optimization session.
+
+Mapped to class aps_optcfg.OPTCONFIGURATIONType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_pord">
+					<xs:annotation>
+						<xs:documentation>Configuration of Production Orders, its Lines and respective Operations namely alternate resources and preparation/execution times.
+
+Mapped to class aps_pord.PRODUCTIONORDERSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_pordseq">
+					<xs:annotation>
+						<xs:documentation>Scheduler output file that indicates the initial sorting order used for the scheduled Production Order Lines.
+
+Mapped to class aps_pordseq.PROD_ORDType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_prgcfg">
+					<xs:annotation>
+						<xs:documentation>Configuration file that is used as an input to the scheduler when running a scheduling session.
+
+Mapped to class aps_prgcfg.PRGCONFIGURATIONType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_res">
+					<xs:annotation>
+						<xs:documentation>Resource and Sub-Resource (Machines, operators, tools, etc.) configuration is done on this file.
+
+Mapped to class aps_res.RESOURCESType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_segres">
+					<xs:annotation>
+						<xs:documentation>Segmented resources configuration for KPI calculation. This file is used to configure which resources you want to include when calculating segmented KPIs.
+
+Mapped to class aps_segres.SEGRESOURCESType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_artcfg">
+					<xs:annotation>
+						<xs:documentation>Defines article/item specific information.
+
+* This file is still not supported by the current Scheduler version.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_aggcap">
+					<xs:annotation>
+						<xs:documentation>Defines Aggregated Capacity Classes.
+This is only used on higher level resources when planning and defines how many items of a certain group can be executed within a specified period.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_aggchgmatrix">
+					<xs:annotation>
+						<xs:documentation>Aggregated Capacity Class efficiency change matrix definition. Defines the changes in the resource efficiency produced by the change from a certain aggregated capacity class to another.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_transp">
+					<xs:annotation>
+						<xs:documentation>Transport times matrix definition. Defines the transport times between resources based on each article group.
+
+Mapped to class aps_transp.TRANSPORTCONFIGType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_trmovs">
+					<xs:annotation>
+						<xs:documentation>Transport Resources Movements Listing. Stores all movements performed by each transport resource as well as its contents. This is both an input and output file.
+
+Mapped to aps_trmovs.TRMOVGRPSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="aps_subres">
+					<xs:annotation>
+						<xs:documentation>Configuration of sub-resource sets that can be referenced and thus reused in aps_res or in aps_pord when defining the needed suib-resources for an operation/resource.
+
+Mapped to aps_subres.SUBRESOURCESETSType</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

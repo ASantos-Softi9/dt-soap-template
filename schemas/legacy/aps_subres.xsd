@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="SUBRESOURCESETS">
+		<xs:annotation>
+			<xs:documentation>ROOT</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBRESOURCESET" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SUBRESOURCESETCODE" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Code used to reference this Sub-Resource set</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SUBRESOURCEGROUPID" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Unique Identifier for this Group</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SUBRESOURCEGROUPPRIORITY" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Sub-Resource Group Priority.
+Lower means higher priority.
+This is only applicable to Sub-Resource Groups included in OR expressions.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SWITCHALLOWED" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed
+
+Default value is 0</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+Default value is 1
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present
+
+Default value is 1</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set in aps_pord.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+Default value is 1
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:enumeration value="0"/>
+										<xs:enumeration value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element ref="SUBRESOURCE" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element ref="SUBRESOURCEGROUP" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+						<xs:attribute name="mode">
+							<xs:annotation>
+								<xs:documentation>Defines if needed Sub-Resources should be combined using AND or OR.
+Defaults to AND.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="AND"/>
+									<xs:enumeration value="OR"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SUBRESOURCEGROUP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBRESOURCEGROUPID" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Unique Identifier for this Group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEGROUPPRIORITY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Group Priority.
+Lower means higher priority.
+This is only applicable to Sub-Resource Groups included in OR expressions.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SWITCHALLOWED" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+If not set it will inherit the value from the SWITCHALLOWED tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+If not set it will inherit the value from the CONSIDERFORSUBRESOURCEBLOCKING tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+If not set it will inherit the value from the DISCARDSUBRESOURCEBLOCKINGIFMISSING tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present </xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set in aps_pord.
+If not set it will inherit the value from the CONSIDERFOREXCLUSIVESUBRESGROUPS tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+This value will propagate to the SUBRESOURCEGROUP and SUBRESOURCE tags below this one and can also be overriden at those levels.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="SUBRESOURCE" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="SUBRESOURCEGROUP" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="mode">
+				<xs:annotation>
+					<xs:documentation>Defines if needed Sub-Resources should be combined using AND or OR.
+Defaults to AND.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="AND"/>
+						<xs:enumeration value="OR"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SUBRESOURCE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SUBRESOURCECODE" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEQUANTITY" type="xs:positiveInteger">
+					<xs:annotation>
+						<xs:documentation>Needed Quantity of this Sub-Resource</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEPERCENTAGE" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Required dedication percentage of this Sub Resource
+Value between 0 and 100</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCEWHENNEEDED">
+					<xs:annotation>
+						<xs:documentation>Type of dedication needed:
+S - Setup;
+E - Execution;
+B - Both;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="S"/>
+							<xs:enumeration value="E"/>
+							<xs:enumeration value="B"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBRESOURCETIMENEEDED" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Duration of sub-resource usage.
+If subresource is required during all setup or execution time this field is optional.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SUBRESOURCETIMENEEDEDUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Measurement unit for SUBRESOURCETIMENEEDED.
+If subresource is required during all setup or execution time this field is optional.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBRESOURCEPRIORITY" type="xs:integer" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Sub-Resource Priority.
+Lower means higher priority.
+This is only applicable to Sub-Resources included in OR expressions.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SWITCHALLOWED" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource can be switched by another one during the execution of an operation if it becomes unavailable due to its calendar.
+If not set it will inherit the value from the SWITCHALLOWED tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Switching not allowed
+1 - Switching allowed</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFORSUBRESOURCEBLOCKING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for SUBRESOURCEBLOCKINGID purposes. This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+If not set it will inherit the value from the CONSIDERFORSUBRESOURCEBLOCKING tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't consider this sub-resource (don't block it)
+1 - Consider this sub-resource (block it)
+
+When set to 1 this sub-resource will become blocked as soon as the operation where it's being used is started and the algorithm will assure it will always be used by the operation(s) with the same SUBRESOURCEBLOCKINGID that are scheduled after this one. It can be unblocked through the use of other settings such as the SUBRESOURCEBLOCKINGIDWAITTHRESHOLD or DISCARDSUBRESOURCEBLOCKINGIFMISSING</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DISCARDSUBRESOURCEBLOCKINGIFMISSING" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be discarded from the block list when it's not present in the  alternative sub-resources of the next operation being scheduled that has a matching SUBRESOURCEBLOCKINGID. When activated this means that if operation A and B both have the same SUBRESOURCEBLOCKINGID value, DISCARDSUBRESOURCEBLOCKINGIFMISSING is set to 1 in operation A and sub-resource C is selected for operation A, if this sub-resource isn't present in the operation B sub-resources then sub-resource C will be discarded from the blocking list and the scheduler will be free to select any other sub-resource for operation B.
+This setting will only be applicable for operations that have SUBRESOURCEBLOCKINGID set in aps_pord.
+If not set it will inherit the value from the DISCARDSUBRESOURCEBLOCKINGIFMISSING tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't discard the sub-resource
+1 - Discard the sub-resource if not present </xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CONSIDERFOREXCLUSIVESUBRESGROUPS" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if a sub-resource should be considered for EXCLUSIVESUBRESGROUPID purposes. This setting will only be applicable for operations that have EXCLUSIVESUBRESGROUPID set in aps_pord.
+If not set it will inherit the value from the CONSIDERFOREXCLUSIVESUBRESGROUPS tag from the SUBRESOURCEGROUP and SUBRESOURCESET nodes upper in the hierarchy.
+
+Admissible values are:
+0 - Don't consider this sub-resource (no exclusivity)
+1 - Consider this sub-resource (ensure exclusivity)
+
+When set to 1 this sub-resource will be blocked for exclusive use only with operations that have the same EXCLUSIVESUBRESGROUPID and EXCLUSIVESUBRESVALUE as this one and won't be available for selection for other EXCLUSIVESUBRESVALUEs within the same EXCLUSIVESUBRESGROUPID. It will still be available for any operations within different EXCLUSIVESUBRESGROUPIDs though</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="PREPTIME" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Preparation Time for this Operation on this Resource when using this Sub-Resource.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PREPTIMEUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Preparation Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="PREPTIMETYPE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Action to be done regarding the preptime vs the one defined at the RESOURCE level:
+R - Replace;
+A - Add or Subtract depending on TIME signal;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="R"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIME" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Execution Time for this Operation on this Resource when using this Sub-Resource.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIMEUNIT" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Execution Time Measurement Unit:
+D - Day;
+H - Hour;
+M - Minute;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="D"/>
+							<xs:enumeration value="H"/>
+							<xs:enumeration value="M"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="OPERATIONEXECTIMETYPE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Action to be done regarding the exectime vs the one defined at the RESOURCE level:
+R - Replace;
+A - Add or Subtract depending on TIME signal;</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="R"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="SUBRESCALENDARMODE" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines if sub-resources and the resource calendars during usage must be an exact match or not.
+Admissible values are:
+A - Both resource and sub-resource calendars must be an exact match during its usage period
+B - Sub-Resource must always be available during the resource usage period, but calendars don't need to be an exact match (sub-resource might end up with unused slots)
+Default value is B</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="A"/>
+							<xs:enumeration value="B"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
