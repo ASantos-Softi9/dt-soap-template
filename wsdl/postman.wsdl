@@ -10,8 +10,8 @@
   <!-- Abstract type -->
   <types>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns="http://www.tmsws.com/wsdl20sample"
-        targetNamespace="http://www.produtech.org/DT">
+        xmlns="http://www.produtech.org/DigitalTwins"
+        targetNamespace="http://www.produtech.org/DigitalTwins">
       <xs:element name="request">
         <xs:complexType>
           <xs:all>
