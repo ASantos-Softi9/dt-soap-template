@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://www.w3.org/ns/wsdl"
-    xmlns:tns="http://www.tmsws.com/DigitalTwins"
+    xmlns:tns="http://www.produtech.org/DigitalTwins"
     xmlns:whttp="http://schemas.xmlsoap.org/wsdl/http/"
     xmlns:wsoap="http://schemas.xmlsoap.org/wsdl/soap/"
     targetNamespace="http://www.produtech.org/DigitalTwins">
