@@ -3,7 +3,7 @@
     xmlns:tns="http://www.tmsws.com/wsdl20sample"
     xmlns:whttp="http://schemas.xmlsoap.org/wsdl/http/"
     xmlns:wsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-    targetNamespace="http://www.tmsws.com/wsdl20sample">
+    targetNamespace="http://www.produtech.org/DT">
 
   <documentation> Add your service description here </documentation>
 
