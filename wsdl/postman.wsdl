@@ -12,14 +12,14 @@
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns="http://www.produtech.org/DigitalTwins"
         targetNamespace="http://www.produtech.org/DigitalTwins">
-      <xs:element name="request">
+      <xs:element name="CatalogResourcesRequest">
         <xs:complexType>
           <xs:all>
-            <xs:element name="tickerSymbol" type="xs:string" />
+            <xs:element name="timestamp" type="xs:string" />
           </xs:all>
         </xs:complexType>
       </xs:element>
-      <xs:element name="response">
+      <xs:element name="CatalogResourcesResponse">
         <xs:complexType>
           <xs:all>
             <xs:element name="price" type="xs:float" />
